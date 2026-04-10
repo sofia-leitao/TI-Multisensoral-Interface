@@ -73,16 +73,14 @@ class SerialGUI:
         
         self.text_display = scrolledtext.ScrolledText(display_frame, height=20, width=80, 
                                                        wrap=tk.WORD, state="disabled", 
-                                                       font=("Courier", 10))
+                                                       font=("Courier", 20))
         self.text_display.pack(fill="both", expand=True)
         
         # Bottom frame for buttons
         bottom_frame = ttk.Frame(self.root, padding=10)
         bottom_frame.pack(fill="x")
-        
-        ttk.Button(bottom_frame, text="Clear Display", command=self.clear_display).pack(side="left", padx=5)
-        ttk.Button(bottom_frame, text="Stop", command=self.stop_reading).pack(side="left", padx=5)
-    
+
+
     def start_reading(self):
         """Initialize connection and start reading thread."""
         try:
@@ -121,22 +119,6 @@ class SerialGUI:
         self.text_display.insert("end", text)
         self.text_display.see("end")
         self.text_display.config(state="disabled")
-    
-    def clear_display(self):
-        """Clear the display area."""
-        self.text_display.config(state="normal")
-        self.text_display.delete("1.0", "end")
-        self.text_display.config(state="disabled")
-    
-    def stop_reading(self):
-        """Stop reading and close connection."""
-        self.reading = False
-        if self.serial_interface:
-            self.serial_interface.close()
-        self.status_var.set("Status: Stopped")
-        self.status_label.config(foreground="red")
-        self.append_text(f"\n[{self._timestamp()}] Disconnected\n")
-        self.root.after(500, self.root.quit)
     
     @staticmethod
     def _timestamp():

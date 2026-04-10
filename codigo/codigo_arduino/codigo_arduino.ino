@@ -17,7 +17,7 @@ void setup() {
 }
  
 void loop() {
-  Serial.println("hello world");
+  //Serial.println("hello world");
 
   // Reset the loop if no new card present on the sensor/reader. This saves the entire process when idle.
   if ( ! rfid.PICC_IsNewCardPresent())
@@ -29,7 +29,7 @@ void loop() {
  
   MFRC522::PICC_Type piccType = rfid.PICC_GetType(rfid.uid.sak);
  
-  Serial.print(F("RFID Tag UID:"));
+  //Serial.print(F("RFID Tag UID:"));
   printHex(rfid.uid.uidByte, rfid.uid.size);
   Serial.println("");
  
