@@ -5,7 +5,7 @@ String currentLine = "";
 boolean hasLine = false;
 
 // Change this to the correct RFID tag value used in your game.
-String correctTag = "CORRECT_TAG";
+String correctTag = "04 67 DC 9F D9 2A 81";
 int portIndex = 2; // matches the Python code selecting the 3rd available port
 
 color bgColor;
@@ -44,6 +44,7 @@ void draw() {
   text("Correct tag: " + correctTag, 20, 70);
   text("Last read: " + (hasLine ? currentLine : "Waiting for data..."), 20, 120);
   text("Status: " + (hasLine ? (currentLine.equals(correctTag) ? "CORRECT" : "WRONG") : "No data yet"), 20, 170);
+  text("currentLine: '" + currentLine + "'", 20, 220);
 }
 
 void serialEvent(Serial p) {
