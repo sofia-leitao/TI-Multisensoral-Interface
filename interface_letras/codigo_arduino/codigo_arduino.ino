@@ -21,10 +21,10 @@ void setup() {
 
 void loop() {
 
-  if ( !rfid.PICC_IsNewCardPresent())
+  if (!rfid.PICC_IsNewCardPresent())
     return;
 
-  if ( !rfid.PICC_ReadCardSerial())
+  if (!rfid.PICC_ReadCardSerial())
     return;
 
   // Envia UID para o Processing
