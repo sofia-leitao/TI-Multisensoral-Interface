@@ -16,6 +16,14 @@ MFRC522 rfid2(SS_2, RST_2);
 int ledCorreto = 6;
 int ledErro = 7;
 
+// botao
+int botao = 5;
+int buttonState;            
+int lastButtonState = LOW;  
+unsigned long lastDebounceTime = 0;
+unsigned long debounceDelay = 50; 
+
+
 void setup() { 
   Serial.begin(9600);
   SPI.begin();
@@ -25,16 +33,33 @@ void setup() {
 
   pinMode(ledCorreto, OUTPUT);
   pinMode(ledErro, OUTPUT);
+  pinMode(botao, INPUT_PULLUP);
 }
+
 
 void loop() {
-
   lerRFID(rfid1);
   lerRFID(rfid2);
+
+  int reading = !digitalRead(botao);
+
+  if (reading != lastButtonState) {
+    lastDebounceTime = millis();
+  }
+
+  if ((millis() - lastDebounceTime) > debounceDelay) {
+    if (reading != buttonState) {
+      buttonState = reading;
+
+      if (buttonState) {
+        Serial.println("B");
+      }
+    }
+  }
+  lastButtonState = reading;
 }
 
 
-// leitura dos dois leitores
 void lerRFID(MFRC522 &rfid) {
 
   if (!rfid.PICC_IsNewCardPresent()) return;
@@ -47,7 +72,6 @@ void lerRFID(MFRC522 &rfid) {
 }
 
 
-// LED control via Processing
 void serialEvent() {
   String comando = Serial.readStringUntil('\n');
   comando.trim();
@@ -69,7 +93,6 @@ void serialEvent() {
 }
 
 
-// FORMATO ANTIGO (COM ESPAÇOS)
 void printHex(byte *buffer, byte bufferSize) {
   for (byte i = 0; i < bufferSize; i++) {
     Serial.print(buffer[i] < 0x10 ? " 0" : " ");

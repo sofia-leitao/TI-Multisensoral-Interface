@@ -12,6 +12,8 @@ String[] pieceNames = {
   "N","O","P","Q","R","S","T","U","V","X","Z"
 };
 
+String correctTag = "04 67 DC 9F D9 2A 81";
+
 String[] tags = {
   "04 13 56 9F D9 2A 81",
   "04 AA 34 9F D9 2A 81",
@@ -73,24 +75,6 @@ void draw() {
   text("Correct tag: " + pieceNames[chosenTag], 20, 90);
   text("Last read: " + (hasLine ? currentLine : "Waiting for data..."), 20, 140);
   text("Sound played: " + audios[chosenTag], 20, 190);
-
-  if (hasLine) {
-    if (currentLine.equals(tags[chosenTag])) {
-      background(0, 200, 0);
-      fill(255);
-      text("Status: CORRECT", 20, 240);
-      myPort.write("C\n");
-      delay(2000);
-      startNewRound();
-    } else {
-      background(200, 0, 0);
-      fill(255);
-      text("Status: WRONG", 20, 240);
-      myPort.write("E\n");
-      delay(2000);
-    }
-  }
-
   text("currentLine: '" + currentLine + "'", 20, 290);
 }
 
@@ -114,6 +98,25 @@ void serialEvent(Serial p) {
       hasLine = true;      // ✅ mark as received
 
       println("Received: " + currentLine); // debug
+    }
+    
+    if (hasLine) {
+      if (currentLine.equals(correctTag)) {
+        bgColor = color(0, 200, 0);
+        fill(255);
+        text("Status: CORRECT", 20, 240);
+        myPort.write("C\n");
+        delay(2000);
+        bgColor = color(0);
+        startNewRound();
+      } else {
+        bgColor = color(200, 0, 0);
+        fill(255);
+        text("Status: WRONG", 20, 240);
+        myPort.write("E\n");
+        delay(2000);
+        bgColor = color(0);
+      }
     }
   } catch (Exception e) {
     e.printStackTrace();
