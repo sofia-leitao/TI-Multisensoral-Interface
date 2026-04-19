@@ -1,16 +1,14 @@
 #include <SPI.h>
 #include <MFRC522.h>
 
-// RFID 1
+// RFID 
+#define RST 9
 #define SS_1 10
-#define RST_1 9
-
-// RFID 2
 #define SS_2 8
-#define RST_2 5
 
-MFRC522 rfid1(SS_1, RST_1);
-MFRC522 rfid2(SS_2, RST_2);
+// inicialização dos RFIDs
+MFRC522 rfid1(SS_1, RST);
+MFRC522 rfid2(SS_2, RST);
 
 // LEDs
 int ledCorreto = 6;
@@ -43,6 +41,7 @@ void loop() {
 
   int reading = !digitalRead(botao);
 
+  // debounce
   if (reading != lastButtonState) {
     lastDebounceTime = millis();
   }
@@ -56,12 +55,12 @@ void loop() {
       }
     }
   }
+  
   lastButtonState = reading;
 }
 
 
 void lerRFID(MFRC522 &rfid) {
-
   if (!rfid.PICC_IsNewCardPresent()) return;
   if (!rfid.PICC_ReadCardSerial()) return;
 
@@ -95,6 +94,7 @@ void serialEvent() {
 
 void printHex(byte *buffer, byte bufferSize) {
   for (byte i = 0; i < bufferSize; i++) {
+    // transforma os bytes recebidos em numeros hexadecimais
     Serial.print(buffer[i] < 0x10 ? " 0" : " ");
     Serial.print(buffer[i], HEX);
   }
