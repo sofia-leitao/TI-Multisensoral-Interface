@@ -7,13 +7,9 @@ class JogoMatematica {
   Serial myPort;
 
   String currentLine = "";
-
   boolean hasLine = false;
-
   SoundFile file;
-
   ExitButton gameExitButton;
-
   boolean gameRunning = true;
 
   String[] numberTags = {
@@ -43,13 +39,11 @@ class JogoMatematica {
   color bgColor = color(0);
 
   JogoMatematica(PApplet parent, Serial myPort) {
-
     this.parent = parent;
     this.myPort = myPort;
   }
 
   void setup() {
-
     gameExitButton = new ExitButton(
       710,
       550,
@@ -59,23 +53,18 @@ class JogoMatematica {
       parent.color(150, 0, 0),
       parent.color(200, 0, 0)
     );
-
     novaConta();
   }
 
   void run() {
-
     if (!gameRunning) return;
-
+    
     parent.background(bgColor);
-
     parent.fill(255);
-
     parent.textAlign(CENTER);
 
     // título
     parent.textSize(30);
-
     parent.text(
       "Jogo da Matemática",
       parent.width / 2,
@@ -84,7 +73,6 @@ class JogoMatematica {
 
     // instruções
     parent.textSize(26);
-
     parent.text(
       "Resolve a conta usando as peças RFID",
       parent.width / 2,
@@ -93,7 +81,6 @@ class JogoMatematica {
 
     // conta
     parent.textSize(80);
-
     parent.text(
       num1 + " " + operacao + " " + num2 + " = ?",
       parent.width / 2,
@@ -102,9 +89,7 @@ class JogoMatematica {
 
     // resposta colocada no sensor
     parent.textSize(40);
-
     if (respostaAtual != -1) {
-
       parent.text(
         "Resposta: " + respostaAtual,
         parent.width / 2,
@@ -114,7 +99,6 @@ class JogoMatematica {
 
     // última tag
     parent.textSize(18);
-
     parent.text(
       "Última tag: " +
       (hasLine ? currentLine : "Nenhuma"),
@@ -126,28 +110,18 @@ class JogoMatematica {
   }
 
   void handleSerialData(Serial p) {
-
     try {
-
       String line = p.readStringUntil('\n');
-
-      if (line == null) return;
-
-      line = line.trim();
-
-      if (line.length() == 0) return;
-
-      currentLine = line;
-
-      hasLine = true;
-
-      println("Recebido: " + currentLine);
-
-      verificarResposta(currentLine);
-
-    }
-    catch(Exception e) {
-
+      if (line != null) {
+        line = line.trim();
+        if (line.length() != 0 || !line.equals("B")) {
+          currentLine = line.substring(2);
+          println("Recebido: " + currentLine);
+          hasLine = true;
+          verificarResposta(currentLine);
+        }
+      }
+    } catch (Exception e) {
       e.printStackTrace();
     }
   }
@@ -155,42 +129,32 @@ class JogoMatematica {
   void verificarResposta(String tag) {
 
     int resposta = obterNumeroDaTag(tag);
-
     respostaAtual = resposta;
-
     println("Resposta: " + resposta);
 
     // correta
     if (resposta == resultado) {
-
       bgColor = parent.color(0, 180, 0);
-
+      
       if (myPort != null) {
-
         myPort.write("C\n");
       }
 
       parent.delay(1500);
-
       bgColor = parent.color(0);
-
       respostaAtual = -1;
-
       novaConta();
     }
 
     // errada
     else {
-
       bgColor = parent.color(180, 0, 0);
-
+      
       if (myPort != null) {
-
         myPort.write("E\n");
       }
-
+      
       parent.delay(1500);
-
       bgColor = parent.color(0);
     }
 
@@ -198,11 +162,8 @@ class JogoMatematica {
   }
 
   int obterNumeroDaTag(String tag) {
-
     for (int i = 0; i < numberTags.length; i++) {
-
       if (tag.equals(numberTags[i])) {
-
         return i;
       }
     }
@@ -211,63 +172,43 @@ class JogoMatematica {
   }
 
   void novaConta() {
-
     int tipo = int(parent.random(2));
 
     // SOMA
     if (tipo == 0) {
-
       do {
-
         num1 = int(parent.random(1, 10));
-
         num2 = int(parent.random(1, 10));
-
         resultado = num1 + num2;
-
       }
       while (resultado > 10);
-
       operacao = "+";
     }
 
     // SUBTRAÇÃO
     else {
-
       num1 = int(parent.random(1, 10));
-
       num2 = int(parent.random(1, 10));
-
       // garante resultado positivo
       if (num2 > num1) {
-
         int temp = num1;
-
         num1 = num2;
-
         num2 = temp;
       }
-
       resultado = num1 - num2;
-
       operacao = "-";
     }
   }
 
   void mousePressed() {
-
     if (gameExitButton.isOver()) {
-
       gameRunning = false;
-
       MainMenu mainMenu = (MainMenu) parent;
-
       mainMenu.returnToMenu();
     }
   }
 
   void stop() {
-
     gameRunning = false;
   }
 }

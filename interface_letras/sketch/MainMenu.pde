@@ -4,10 +4,12 @@ import processing.sound.*;
 MenuButton letrasButton;
 MenuButton matButton;
 MenuButton coresButton;
+MenuButton torresButton;
 ExitButton exitButton;
 JogoLetras jogoLetras;
 JogoMatematica jogoMatematica;
 JogoCores jogoCores;
+JogoTorres jogoTorres;
 int screenState = 0; // 0 = menu, 1 = game
 Serial myPort;
 
@@ -44,6 +46,16 @@ coresButton = new MenuButton(
   color(100)
 );
 
+torresButton = new MenuButton(
+  width/2 - 120,
+  height/2 + 180,
+  240,
+  60,
+  "Jogo das Torres",
+  color(50),
+  color(100)
+);
+
 exitButton = new ExitButton(
   width - 100,
   height - 60,
@@ -65,6 +77,7 @@ exitButton = new ExitButton(
   jogoLetras = null;
   jogoMatematica = null;
   jogoCores = null;
+  jogoTorres = null;
 }
 
 void draw() {
@@ -77,6 +90,7 @@ void draw() {
     letrasButton.display();
     matButton.display();
     coresButton.display();
+    torresButton.display();
     exitButton.display();
   }
   else if (screenState == 1 && jogoLetras != null) {
@@ -87,6 +101,9 @@ void draw() {
   }
   else if (screenState == 1 && jogoCores != null) {
     jogoCores.run();
+  } 
+  else if (screenState == 1 && jogoTorres != null) {
+    jogoTorres.run();
   }
 }
 
@@ -100,6 +117,9 @@ void serialEvent(Serial p) {
   }
   else if (screenState == 1 && jogoCores != null) {
     jogoCores.handleSerialData(p);
+  } 
+  else if (screenState == 1 && jogoTorres != null) {
+    jogoTorres.handleSerialData(p);
   }
 }
 
@@ -113,6 +133,9 @@ void mousePressed() {
     }
     if (coresButton.isOver()) {
       startCoresGame();
+    }
+    if (torresButton.isOver()){
+      startTorresGame();
     }
     if (exitButton.isOver()) {
       exit();
@@ -134,14 +157,22 @@ void startLetrasGame() {
   jogoLetras.setup();
   screenState = 1;
 }
+
 void startMatematicaGame() {
   jogoMatematica = new JogoMatematica(this, myPort);
   jogoMatematica.setup();
   screenState = 1;
 }
+
 void startCoresGame() {
   jogoCores = new JogoCores(this, myPort);
   jogoCores.setup();
+  screenState = 1;
+}
+
+void startTorresGame() {
+  jogoTorres = new JogoTorres(this, myPort);
+  jogoTorres.setup();
   screenState = 1;
 }
 
@@ -154,9 +185,13 @@ void returnToMenu() {
     jogoMatematica.stop();
     jogoMatematica = null;
   }
-if (jogoCores != null) {
+  if (jogoCores != null) {
     jogoCores.stop();
     jogoCores = null;
-  }  
-  screenState = 0;
+  } 
+  if (jogoTorres != null) {
+    jogoTorres.stop();
+    jogoTorres = null;
+  }
+    screenState = 0;
 }

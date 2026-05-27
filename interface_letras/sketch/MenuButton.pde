@@ -42,117 +42,64 @@ class MenuButton {
 
 
   void display() {
-
     update();
-
+    
     // animação hover
     if (over) {
-
       scaleFactor = lerp(scaleFactor, 1.06, 0.15);
-
       glowAlpha = lerp(glowAlpha, 80, 0.12);
-
     } else {
-
       scaleFactor = lerp(scaleFactor, 1.0, 0.15);
-
       glowAlpha = lerp(glowAlpha, 0, 0.12);
     }
 
     pushMatrix();
-
     translate(x + w/2, y + h/2);
-
     scale(scaleFactor);
-
     rectMode(CENTER);
-
     noStroke();
 
-    // =========================
-    // GLOW
-    // =========================
-
+    // glow
     fill(255, glowAlpha * 0.2);
-
     rect(0, 0, w + 26, h + 26, 26);
-
     fill(255, glowAlpha * 0.1);
-
     rect(0, 0, w + 40, h + 40, 30);
 
-    // =========================
-    // SOMBRA
-    // =========================
-
+    // sombra
     fill(0, 120);
-
     rect(6, 8, w, h, 22);
 
-    // =========================
-    // BOTÃO
-    // =========================
-
+    // botao
     if (over) {
-
       fill(hoverColor);
-
     } else {
-
       fill(normalColor);
     }
-
     rect(0, 0, w, h, 22);
 
-    // =========================
-    // BRILHO TOPO
-    // =========================
-
+    // brilho no topo
     fill(255, 35);
-
     rect(0, -h/4, w - 18, h/3, 18);
 
-    // =========================
-    // BORDA
-    // =========================
-
+    // bordas
     stroke(255, 40);
-
     strokeWeight(2);
-
     noFill();
-
     rect(0, 0, w, h, 22);
-
     noStroke();
 
-    // =========================
-    // TEXTO
-    // =========================
-
+    // texto
     fill(0, 80);
-
     textAlign(CENTER, CENTER);
-
     textSize(24);
-
     text(label, 2, 3);
-
     fill(textColor);
-
     text(label, 0, 0);
-
     popMatrix();
-
     rectMode(CORNER);
-
     textAlign(LEFT, BASELINE);
   }
-
-  // =========================
-  // UPDATE
-  // =========================
-
+  
   void update() {
 
     over =
@@ -162,12 +109,7 @@ class MenuButton {
       mouseY <= y + h;
   }
 
-  // =========================
-  // HOVER
-  // =========================
-
   boolean isOver() {
-
     return over;
   }
 }

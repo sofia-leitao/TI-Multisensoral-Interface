@@ -1,5 +1,4 @@
 import processing.serial.*;
-import processing.sound.*;
 
 class JogoCores {
 
@@ -18,17 +17,17 @@ class JogoCores {
   };
 
   String[][] tags = {
-//vermelho
+  //vermelho
     {
       "04 4A DD 9F D9 2A 81", //maça
       "04 76 E3 9F D9 2A 81" //coração
     },
-//verde
+  //verde
     {
       "04 DF 42 9F D9 2A 81",//arvore
       "04 E1 42 9F D9 2A 81"//sapo
     },
-//azul
+  //azul
     {
       "04 67 2F 9F D9 2A 81",//gota
       "04 D5 42 9F D9 2A 81"//peixe
@@ -56,7 +55,6 @@ class JogoCores {
 
 
   void setup() {
-
     gameExitButton = new ExitButton(
       710, 550,
       70, 40,
@@ -70,19 +68,14 @@ class JogoCores {
 
 
   void run() {
-
     if (!gameRunning) return;
-
+    
     parent.background(bgColor);
-
     parent.fill(255);
-
     parent.textSize(30);
     parent.text("Jogo das Cores", 20, 40);
-
     parent.textSize(20);
     parent.text("Passa o objeto da cor correta no RFID", 20, 90);
-
     parent.fill(displayColors[chosenColor]);
     parent.rect(250, 170, 300, 220, 20);
 
@@ -106,53 +99,33 @@ class JogoCores {
 
 
   void handleSerialData(Serial p) {
-
-  try {
-
-    String line = p.readStringUntil('\n');
-
-    if (line == null) return;
-
-    line = line.trim();
-
-    if (line.length() == 0) return;
-
-    currentLine = line;
-
-    println("Recebido: " + currentLine);
-
-    hasLine = true;
-
-    // chama lógica do jogo
-    processarTag(currentLine);
-
-  } catch (Exception e) {
-    e.printStackTrace();
-  }
+    try {
+      String line = p.readStringUntil('\n');
+      if (line != null) {
+        line = line.trim();
+        if (line.length() != 0 || !line.equals("B")) {
+          currentLine = line.substring(2);
+          println("Recebido: " + currentLine);
+          hasLine = true;
+          processarTag(currentLine); // executar a lógica do jogo
+        }
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
 }
 
 void processarTag(String tag) {
-
   if (tagCorreta(tag, chosenColor)) {
-
     bgColor = parent.color(0, 180, 0);
-
     myPort.write("C\n");
-
     parent.delay(1500);
-
     bgColor = parent.color(0);
-
     startNewRound();
-
   } else {
-
     bgColor = parent.color(180, 0, 0);
-
     myPort.write("E\n");
-
     parent.delay(1500);
-
     bgColor = parent.color(0);
   }
 
@@ -160,45 +133,34 @@ void processarTag(String tag) {
 }
 
 
-
   String normalizeTag(String t) {
-
     t = t.replace("\r", "");
     t = t.replace("\n", "");
     t = t.trim();
-
     return t;
   }
 
 
   boolean tagCorreta(String tag, int cor) {
-
     for (String t : tags[cor]) {
-
       if (tag.equals(t)) return true;
     }
-
     return false;
   }
 
 
   void startNewRound() {
-
     chosenColor = int(parent.random(colorNames.length));
-
     currentLine = "";
     hasLine = false;
-
     enviarCorLED(chosenColor);
   }
 
  
   void enviarCorLED(int cor) {
-
     if (myPort == null) return;
-
+    
     switch(cor) {
-
       case 0: myPort.write("R\n"); break;
       case 1: myPort.write("G\n"); break;
       case 2: myPort.write("B\n"); break;
@@ -207,22 +169,16 @@ void processarTag(String tag) {
 
 
   void mousePressed() {
-
     if (gameExitButton.isOver()) {
-
       gameRunning = false;
-
       MainMenu mainMenu = (MainMenu) parent;
-
       mainMenu.returnToMenu();
     }
   }
 
 
   void stop() {
-
     gameRunning = false;
-
     if (file != null) file.stop();
   }
 }

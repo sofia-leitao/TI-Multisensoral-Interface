@@ -75,6 +75,7 @@ class JogoLetras {
           hasLine = false;
           if (file != null) file.play();
         } else {
+          currentLine = line.substring(2);
           hasLine = true;
         }
         println("Received in game: " + currentLine); 
