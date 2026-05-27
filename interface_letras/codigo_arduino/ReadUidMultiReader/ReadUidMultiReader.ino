@@ -34,10 +34,6 @@ void setup() {
 
   for (uint8_t reader = 0; reader < NR_OF_READERS; reader++) {
     mfrc522[reader].PCD_Init(ssPins[reader], RST_PIN); // Init each MFRC522 card
-    Serial.print(F("Reader "));
-    Serial.print(reader);
-    Serial.print(F(": "));
-    mfrc522[reader].PCD_DumpVersionToSerial();
   }
 
   pinMode(LED_R, OUTPUT);
@@ -49,15 +45,12 @@ void setup() {
 
 
 void loop() {
-
   for (uint8_t reader = 0; reader < NR_OF_READERS; reader++) {
     if (!mfrc522[reader].PICC_IsNewCardPresent()) continue;
     if (!mfrc522[reader].PICC_ReadCardSerial()) continue;
     
-    // Found a card - show info and visual feedback
-    Serial.print(F("Reader "));
-    Serial.print(reader);
-    Serial.print(F(": Card UID: "));
+    // encontrou uma tag
+    Serial.print(reader + "-");
     printHex(mfrc522[reader].uid.uidByte, mfrc522[reader].uid.size);
     Serial.println();
     
@@ -94,16 +87,22 @@ void serialEvent() {
 
   // correto
   if (comando == "C") {
-    verde();
-    delay(2000);
-    apagarLED();
+    for (int i = 0; i < 5; i ++) {}
+      verde();
+      delay(200);
+      apagarLED();
+      delay(200);
+    }
   }
 
   // erro
   else if (comando == "E") {
-    vermelho();
-    delay(2000);
-    apagarLED();
+    for (int i = 0; i < 5; i ++) {}
+      vermelho();
+      delay(200);
+      apagarLED();
+      delay(200);
+    }
   }
 
   // vermelho
