@@ -1,15 +1,15 @@
 #include <SPI.h>
 #include <MFRC522.h>
 
-// RFID
-#define SS_1 10
-#define RST_1 9
+#define RST_PIN         9          // Configurable, see typical pin layout above
+#define SS_1_PIN        10         // Configurable, take a unused pin, only HIGH/LOW required, must be different to SS 2
+#define SS_2_PIN        8          // Configurable, take a unused pin, only HIGH/LOW required, must be different to SS 1
 
-#define SS_2 8
-#define RST_2 5
+#define NR_OF_READERS   2
 
-MFRC522 rfid1(SS_1, RST_1);
-MFRC522 rfid2(SS_2, RST_2);
+byte ssPins[] = {SS_1_PIN, SS_2_PIN};
+
+MFRC522 mfrc522[NR_OF_READERS];   // Create MFRC522 instance.
 
 // LED RGB
 #define LED_R 6
@@ -18,35 +18,56 @@ MFRC522 rfid2(SS_2, RST_2);
 
 // botão
 int botao = 4;
-
 int buttonState;
 int lastButtonState = LOW;
-
 unsigned long lastDebounceTime = 0;
 unsigned long debounceDelay = 50;
 
+/**
+ * Initialize.
+ */
 void setup() {
+  Serial.begin(9600); // Initialize serial communications with the PC
+  while (!Serial);    // Do nothing if no serial port is opened (added for Arduinos based on ATMEGA32U4)
 
-  Serial.begin(9600);
+  SPI.begin();        // Init SPI bus
 
-  SPI.begin();
-
-  rfid1.PCD_Init();
-  rfid2.PCD_Init();
+  for (uint8_t reader = 0; reader < NR_OF_READERS; reader++) {
+    mfrc522[reader].PCD_Init(ssPins[reader], RST_PIN); // Init each MFRC522 card
+    Serial.print(F("Reader "));
+    Serial.print(reader);
+    Serial.print(F(": "));
+    mfrc522[reader].PCD_DumpVersionToSerial();
+  }
 
   pinMode(LED_R, OUTPUT);
   pinMode(LED_G, OUTPUT);
   pinMode(LED_B, OUTPUT);
 
   pinMode(botao, INPUT_PULLUP);
-
-  apagarLED(); // é necessario ?? (penso q nao)
 }
+
 
 void loop() {
 
-  lerRFID(rfid1);
-  lerRFID(rfid2);
+  for (uint8_t reader = 0; reader < NR_OF_READERS; reader++) {
+    if (!mfrc522[reader].PICC_IsNewCardPresent()) continue;
+    if (!mfrc522[reader].PICC_ReadCardSerial()) continue;
+    
+    // Found a card - show info and visual feedback
+    Serial.print(F("Reader "));
+    Serial.print(reader);
+    Serial.print(F(": Card UID: "));
+    printHex(mfrc522[reader].uid.uidByte, mfrc522[reader].uid.size);
+    Serial.println();
+    
+    azul();
+    delay(300);
+    apagarLED();
+    
+    mfrc522[reader].PICC_HaltA();
+    mfrc522[reader].PCD_StopCrypto1();
+  }
 
   int reading = !digitalRead(botao);
 
@@ -67,28 +88,8 @@ void loop() {
   lastButtonState = reading;
 }
 
-
-void lerRFID(MFRC522 &rfid) {
-
-  if (!rfid.PICC_IsNewCardPresent()) return;
-  if (!rfid.PICC_ReadCardSerial()) return;
-
-  printHex(rfid.uid.uidByte, rfid.uid.size);
-  Serial.println();
-
-  // feedback visual
-  azul();
-  delay(300);
-  apagarLED();
-  rfid.PICC_HaltA();
-}
-
-
-
 void serialEvent() {
-
   String comando = Serial.readStringUntil('\n');
-
   comando.trim();
 
   // correto
@@ -119,34 +120,28 @@ void serialEvent() {
   else if (comando == "B") {
     azul();
   }
-
 }
 
-// =========================
-// CORES
-// =========================
-
+/**
+ * Cores
+ */
 void vermelho() {
-
   digitalWrite(LED_R, HIGH);
   digitalWrite(LED_G, LOW);
   digitalWrite(LED_B, LOW);
 }
 
 void verde() {
-
   digitalWrite(LED_R, LOW);
   digitalWrite(LED_G, HIGH);
   digitalWrite(LED_B, LOW);
 }
 
 void azul() {
-
   digitalWrite(LED_R, LOW);
   digitalWrite(LED_G, LOW);
   digitalWrite(LED_B, HIGH);
 }
-
 
 void apagarLED() {
   digitalWrite(LED_R, LOW);
@@ -154,13 +149,9 @@ void apagarLED() {
   digitalWrite(LED_B, LOW);
 }
 
-
 void printHex(byte *buffer, byte bufferSize) {
-
   for (byte i = 0; i < bufferSize; i++) {
-
     Serial.print(buffer[i] < 0x10 ? " 0" : " ");
-
     Serial.print(buffer[i], HEX);
   }
 }
