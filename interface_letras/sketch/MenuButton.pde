@@ -1,7 +1,5 @@
 class MenuButton {
-
   int x, y, w, h;
-
   String label;
 
   color normalColor;
@@ -13,16 +11,7 @@ class MenuButton {
 
   float anim = 0;
  
-  MenuButton(
-    int x,
-    int y,
-    int w,
-    int h,
-    String label,
-    color normalColor,
-    color hoverColor
-    ) {
-
+  MenuButton(int x, int y, int w, int h, String label, color normalColor, color hoverColor) {
     this.x = x;
     this.y = y;
 
@@ -35,11 +24,10 @@ class MenuButton {
     this.hoverColor = hoverColor;
   }
 
-  void display() {
 
+  void display() {
     update();
 
-    // animação suave
     if (over) {
       anim = lerp(anim, 1, 0.12);
     } else {
@@ -47,15 +35,10 @@ class MenuButton {
     }
 
     pushMatrix();
-
     float scaleValue = 1 + anim * 0.04;
-
     translate(x + w/2, y + h/2);
-
     scale(scaleValue);
-
     rectMode(CENTER);
-
     noStroke();
 
     // sombra suave
@@ -63,11 +46,7 @@ class MenuButton {
     rect(0, 8, w, h, 30);
 
     // cor animada
-    color currentColor = lerpColor(
-      normalColor,
-      hoverColor,
-      anim
-      );
+    color currentColor = lerpColor(normalColor, hoverColor, anim);
 
     // botão principal
     fill(currentColor);
@@ -83,27 +62,20 @@ class MenuButton {
 
     // ícone lateral
     fill(255, 40);
-
     ellipse(-w/2 + 35, 0, 18, 18);
 
     // texto
     textAlign(CENTER, CENTER);
-
     textSize(24);
-
     fill(255);
-
     text(label, 10, 0);
-
     popMatrix();
 
     rectMode(CORNER);
-
     textAlign(LEFT, BASELINE);
   }
 
   void update() {
-
     over =
       mouseX >= x &&
       mouseX <= x + w &&
@@ -112,7 +84,6 @@ class MenuButton {
   }
 
   boolean isOver() {
-
     return over;
   }
 }

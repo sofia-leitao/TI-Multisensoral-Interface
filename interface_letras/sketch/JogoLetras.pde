@@ -2,29 +2,18 @@ import processing.serial.*;
 import processing.sound.*;
 
 class JogoLetras {
-
-  // =====================================================
-  // VARIÁVEIS
-  // =====================================================
-
   PApplet parent;
-
-  Serial myPort;
-
+  Serial myPort1, myPort2;
   String currentLine = "";
-
   boolean hasLine = false;
-
   SoundFile file;
 
   String[] pieceNames = {
-
     "A","B","C","D","E","F","G","H","I","J","L","M",
     "N","O","P","Q","R","S","T","U","V","X","Z"
   };
 
   String[] tags = {
-
     "04 13 56 9F D9 2A 81",
     "04 AA 34 9F D9 2A 81",
     "04 56 56 9F D9 2A 81",
@@ -51,7 +40,6 @@ class JogoLetras {
   };
 
   String[] audios = {
-
     "../alphabet/a.mp3",
     "../alphabet/b.mp3",
     "../alphabet/c.mp3",
@@ -78,288 +66,149 @@ class JogoLetras {
   };
 
   int chosenTag;
-
   ExitButton gameExitButton;
-
   boolean gameRunning = true;
 
-  // =====================================================
 
-  JogoLetras(PApplet parent, Serial myPort) {
-
+  JogoLetras(PApplet parent, Serial myPort1, Serial myPort2) {
     this.parent = parent;
-
-    this.myPort = myPort;
+    this.myPort1 = myPort1;
+    this.myPort2 = myPort2;
   }
 
-  // =====================================================
 
   void setup() {
-
-    gameExitButton = new ExitButton(
-      840,
-      620,
-      120,
-      50,
-      "MENU",
-      parent.color(255, 90, 90),
-      parent.color(255, 130, 130)
-      );
-
+    gameExitButton = new ExitButton(840, 620, 120, 50, "MENU", parent.color(255, 90, 90), parent.color(255, 130, 130));
     startNewRound();
   }
 
-  // =====================================================
 
   void run() {
-
     if (!gameRunning) return;
-
     drawBackground();
-
     drawTitle();
-
     drawLetterCard();
-
     drawInstructions();
-
     drawLastTag();
-
     gameExitButton.display();
   }
 
-  // =====================================================
-  // BACKGROUND
-  // =====================================================
 
   void drawBackground() {
-
     for (int i = 0; i < parent.height; i++) {
-
-      float inter =
-        map(i, 0, parent.height, 0, 1);
-
-      color c = lerpColor(
-        color(220, 210, 210),
-        color(210, 220, 220),
-        inter
-        );
-
+      float inter = map(i, 0, parent.height, 0, 1);
+      color c = lerpColor(color(220, 210, 210), color(210, 220, 220), inter);
       parent.stroke(c);
-
       parent.line(0, i, parent.width, i);
     }
   }
 
 
   void drawTitle() {
-
     parent.textAlign(CENTER, CENTER);
-
     parent.textSize(44);
-
-   
-
+    
     // texto
     parent.fill(0);
-parent.text(
-      "Jogo das Letras",
-      parent.width/2,
-      60
-      );
+    parent.text("Jogo das Letras", parent.width/2, 60);
   }
 
 
   void drawLetterCard() {
-
     parent.pushMatrix();
-
     parent.translate(parent.width/2, 290);
-
     parent.rectMode(CENTER);
 
     // letra
     parent.fill(0);
-
     parent.textAlign(CENTER, CENTER);
-
     parent.textSize(100);
-
-    parent.text(
-      pieceNames[chosenTag],
-      0,
-      -10
-      );
-
+    parent.text(pieceNames[chosenTag], 0, -10);
     parent.popMatrix();
-
     parent.rectMode(CORNER);
   }
 
 
   void drawInstructions() {
-
     parent.textAlign(CENTER);
-
     parent.fill(0);
-
     parent.textSize(24);
-
-    parent.text(
-      "Passa a letra correta no RFID",
-      parent.width/2,
-      470
-      );
-
+    parent.text("Passa a letra correta no RFID", parent.width/2, 470);
     parent.textSize(18);
-
-    parent.text(
-      "Carrega no botão para ouvir o som novamente",
-      parent.width/2,
-      510
-      );
+    parent.text("Carrega no botão para ouvir o som novamente", parent.width/2, 510);
   }
 
-  // =====================================================
-  // TAG
-  // =====================================================
 
   void drawLastTag() {
-
     parent.textAlign(LEFT);
-
     parent.fill(40);
-
     parent.textSize(18);
-
-    parent.text(
-      "Última tag: "
-      + (hasLine ? currentLine : "nenhuma"),
-      30,
-      650
-      );
+    parent.text("Última tag: " + (hasLine ? currentLine : "nenhuma"), 30, 650);
   }
 
-  // =====================================================
-  // SERIAL
-  // =====================================================
 
   void handleSerialData(Serial p) {
-
     try {
-
-      String line =
-        p.readStringUntil('\n');
-
+      String line = p.readStringUntil('\n');
       if (line != null) {
-
         line = line.trim();
-
         if (line.length() == 0) return;
-
         currentLine = line;
-
-        // botão replay
+        // replay
         if (currentLine.equals("B")) {
-
           hasLine = false;
-
           if (file != null) {
-
             file.play();
           }
-        }
-
-        else {
-
-          currentLine =
-            line.substring(2);
-
+        } else {
+          currentLine = line.substring(2);
           hasLine = true;
         }
-
-        println(
-          "Received in game: "
-          + currentLine
-          );
+        println("Received in game: " + currentLine);
       }
-
       if (hasLine) {
-
         if (currentLine.equals(tags[chosenTag])) {
-
           parent.delay(1000);
-
           startNewRound();
         }
-
         else {
-
           parent.delay(1000);
-
           if (file != null) {
-
             file.play();
           }
         }
       }
     }
-
     catch(Exception e) {
-
       e.printStackTrace();
     }
   }
 
-  // =====================================================
-  // NOVA RONDA
-  // =====================================================
 
   void startNewRound() {
-
-    chosenTag =
-      int(parent.random(tags.length));
-
+    chosenTag = int(parent.random(tags.length));
     hasLine = false;
-
     currentLine = "";
-
     if (audios[chosenTag] != null) {
-
-      file =
-        new SoundFile(
-        parent,
-        audios[chosenTag]
-        );
-
+      file = new SoundFile(parent, audios[chosenTag]);
       file.play();
     }
   }
 
-  // =====================================================
 
   void mousePressed() {
-
     if (gameExitButton.isOver()) {
-
       gameRunning = false;
-
-      MainMenu mainMenu =
-        (MainMenu) parent;
-
+      MainMenu mainMenu = (MainMenu) parent;
       mainMenu.returnToMenu();
     }
   }
 
-  // =====================================================
 
   void stop() {
-
     if (file != null) {
-
       file.stop();
     }
-
     gameRunning = false;
   }
 }
