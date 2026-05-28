@@ -39,30 +39,30 @@ class JogoLetras {
     "04 9F A6 9F D9 2A 81"
   };
 
- String[] audios = {
-    "../Letras/A.mp3",
-    "../Letras/B.mp3",
-    "../Letras/C.mp3",
-    "../Letras/D.mp3",
-    "../Letras/E.mp3",
-    "../Letras/F.mp3",
-    "../Letras/G.mp3",
-    "../Letras/H.mp3",
-    "../Letras/I.mp3",
-    "../Letras/J.mp3",
-    "../Letras/L.mp3",
-    "../Letras/M.mp3",
-    "../Letras/N.mp3",
-    "../Letras/O.mp3",
-    "../Letras/P.mp3",
-    "../Letras/Q.mp3",
-    "../Letras/R.mp3",
-    "../Letras/S.mp3",
-    "../Letras/T.mp3",
-    "../Letras/U.mp3",
-    "../Letras/V.mp3",
-    "../Letras/X.mp3",
-    "../Letras/Z.mp3"
+  String[] audios = {
+    "../alphabet/a.mp3",
+    "../alphabet/b.mp3",
+    "../alphabet/c.mp3",
+    "../alphabet/d.mp3",
+    "../alphabet/e.mp3",
+    "../alphabet/f.mp3",
+    "../alphabet/g.mp3",
+    "../alphabet/h.mp3",
+    "../alphabet/i.mp3",
+    "../alphabet/j.mp3",
+    "../alphabet/l.mp3",
+    "../alphabet/m.mp3",
+    "../alphabet/n.mp3",
+    "../alphabet/o.mp3",
+    "../alphabet/p.mp3",
+    "../alphabet/q.mp3",
+    "../alphabet/r.mp3",
+    "../alphabet/s.mp3",
+    "../alphabet/t.mp3",
+    "../alphabet/u.mp3",
+    "../alphabet/v.mp3",
+    "../alphabet/x.mp3",
+    "../alphabet/z.mp3"
   };
 
   int chosenTag;
@@ -161,24 +161,18 @@ class JogoLetras {
             file.play();
           }
         } else {
-          currentLine = line.substring(3);
+          currentLine = line.substring(2);
           hasLine = true;
         }
-        println("Recebido: \"" + currentLine);
+        println("Received in game: " + currentLine);
       }
       if (hasLine) {
         if (currentLine.equals(tags[chosenTag])) {
           parent.delay(1000);
-          if (myPort2 != null) {
-            myPort2.write("C\n");
-          }
           startNewRound();
         }
         else {
           parent.delay(1000);
-          if (myPort2 != null) {
-            myPort2.write("E\n");
-          }
           if (file != null) {
             file.play();
           }
