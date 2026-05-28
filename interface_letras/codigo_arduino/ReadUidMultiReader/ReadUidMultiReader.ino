@@ -1,19 +1,20 @@
 #include <SPI.h>
 #include <MFRC522.h>
 
-#define RST_PIN         9          // Configurable, see typical pin layout above
-#define SS_1_PIN        10         // Configurable, take a unused pin, only HIGH/LOW required, must be different to SS 2
-#define SS_2_PIN        8          // Configurable, take a unused pin, only HIGH/LOW required, must be different to SS 1
+#define RST_PIN         9         
+#define SS_1_PIN        10        
+#define SS_2_PIN        8          
+#define SS_3_PIN        7
 
-#define NR_OF_READERS   2
+#define NR_OF_READERS   1
 
-byte ssPins[] = {SS_1_PIN, SS_2_PIN};
+byte ssPins[] = {SS_1_PIN};
 
-MFRC522 mfrc522[NR_OF_READERS];   // Create MFRC522 instance.
+MFRC522 mfrc522[NR_OF_READERS]; 
 
 // LED RGB
 #define LED_R 6
-#define LED_G 7
+#define LED_G 5
 #define LED_B 3
 
 // botão
@@ -27,13 +28,13 @@ unsigned long debounceDelay = 50;
  * Initialize.
  */
 void setup() {
-  Serial.begin(9600); // Initialize serial communications with the PC
-  while (!Serial);    // Do nothing if no serial port is opened (added for Arduinos based on ATMEGA32U4)
+  Serial.begin(9600); 
+  while (!Serial);
 
-  SPI.begin();        // Init SPI bus
+  SPI.begin();   
 
   for (int reader = 0; reader < NR_OF_READERS; reader++) {
-    mfrc522[reader].PCD_Init(ssPins[reader], RST_PIN); // Init each MFRC522 card
+    mfrc522[reader].PCD_Init(ssPins[reader], RST_PIN);
   }
 
   pinMode(LED_R, OUTPUT);
@@ -54,9 +55,9 @@ void loop() {
     printHex(mfrc522[reader].uid.uidByte, mfrc522[reader].uid.size);
     Serial.println();
     
-    azul();
-    delay(300);
-    apagarLED();
+    // azul();
+    // delay(300);
+    // apagarLED();
     
     mfrc522[reader].PICC_HaltA();
     mfrc522[reader].PCD_StopCrypto1();

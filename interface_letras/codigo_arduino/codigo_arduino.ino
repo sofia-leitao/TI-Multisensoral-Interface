@@ -6,10 +6,13 @@
 #define RST_1 9
 
 #define SS_2 8
-#define RST_2 5
+#define RST_2 9
+
+#define SS_3 5
 
 MFRC522 rfid1(SS_1, RST_1);
 MFRC522 rfid2(SS_2, RST_2);
+MFRC522 rfid3(SS_3, RST_2);
 
 // LED RGB
 #define LED_R 6
@@ -33,6 +36,7 @@ void setup() {
 
   rfid1.PCD_Init();
   rfid2.PCD_Init();
+  rfid3.PCD_Init();
 
   pinMode(LED_R, OUTPUT);
   pinMode(LED_G, OUTPUT);
@@ -47,6 +51,7 @@ void loop() {
 
   lerRFID(rfid1);
   lerRFID(rfid2);
+  lerRFID(rfid3);
 
   int reading = !digitalRead(botao);
 
