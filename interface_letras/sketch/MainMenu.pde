@@ -6,74 +6,91 @@ MenuButton matButton;
 MenuButton coresButton;
 MenuButton torresButton;
 ExitButton exitButton;
+
 JogoLetras jogoLetras;
 JogoMatematica jogoMatematica;
 JogoCores jogoCores;
 JogoTorres jogoTorres;
-int screenState = 0; // 0 = menu, 1 = game
+
+int screenState = 0; // 0 = menu | 1 = game
+
 Serial myPort;
 
+PFont titleFont;
+PFont buttonFont;
+
 void setup() {
-  size(800, 600);
-  
-letrasButton = new MenuButton(
-  width/2 - 120,
-  height/2 - 60,
-  240,
-  60,
-  "Jogo das Letras",
-  color(50),
-  color(100)
-);
 
-matButton = new MenuButton(
-  width/2 - 120,
-  height/2 + 20,
-  240,
-  60,
-  "Jogo da Matemática",
-  color(50),
-  color(100)
-);
+  size(1000, 700);
 
-coresButton = new MenuButton(
-  width/2 - 120,
-  height/2 + 100,
-  240,
-  60,
-  "Jogo das Cores",
-  color(50),
-  color(100)
-);
+  smooth(8);
 
-torresButton = new MenuButton(
-  width/2 - 120,
-  height/2 + 180,
-  240,
-  60,
-  "Jogo das Torres",
-  color(50),
-  color(100)
-);
+  titleFont = createFont("Arial Bold", 56);
+  buttonFont = createFont("Arial", 24);
 
-exitButton = new ExitButton(
-  width - 100,
-  height - 60,
-  80,
-  40,
-  "Sair",
-  color(50),
-  color(100)
-);
-  
+  letrasButton = new MenuButton(
+    width/2 - 180,
+    180,
+    360,
+    70,
+    "Jogo das Letras",
+    color(255, 140, 70),
+    color(255, 180, 100)
+    );
+
+  matButton = new MenuButton(
+    width/2 - 180,
+    280,
+    360,
+    70,
+    "Jogo da Matemática",
+    color(70, 170, 255),
+    color(120, 210, 255)
+    );
+
+  coresButton = new MenuButton(
+    width/2 - 180,
+    380,
+    360,
+    70,
+    "Jogo das Cores",
+    color(255, 90, 170),
+    color(255, 140, 200)
+    );
+
+  torresButton = new MenuButton(
+    width/2 - 180,
+    480,
+    360,
+    70,
+    "Jogo das Torres",
+    color(150, 100, 255),
+    color(190, 150, 255)
+    );
+
+  exitButton = new ExitButton(
+    width - 130,
+    height - 70,
+    100,
+    45,
+    "Sair",
+    color(255, 80, 80),
+    color(255, 120, 120)
+    );
+
   printArray(Serial.list());
+
   if (Serial.list().length > 2) {
+
     String portName = Serial.list()[2];
+
     myPort = new Serial(this, portName, 9600);
+
     myPort.bufferUntil('\n');
+
     myPort.clear();
   }
-  
+
   jogoLetras = null;
   jogoMatematica = null;
   jogoCores = null;
@@ -81,120 +98,210 @@ exitButton = new ExitButton(
 }
 
 void draw() {
+
   if (screenState == 0) {
-    background(0);
-    fill(255);
-    textAlign(CENTER, CENTER);
-    textSize (42);
-    text("Jogos Educativos", width/2, 100);
+
+    drawBackground();
+
+    drawTitle();
+
     letrasButton.display();
     matButton.display();
     coresButton.display();
     torresButton.display();
+
     exitButton.display();
   }
+
   else if (screenState == 1 && jogoLetras != null) {
     jogoLetras.run();
   }
+
   else if (screenState == 1 && jogoMatematica != null) {
     jogoMatematica.run();
   }
+
   else if (screenState == 1 && jogoCores != null) {
     jogoCores.run();
-  } 
+  }
+
   else if (screenState == 1 && jogoTorres != null) {
     jogoTorres.run();
   }
 }
 
-// ao receber informação chama a classe do jogo ativo para lidar com ela
+// BACKGROUND
+
+void drawBackground() {
+
+  for (int i = 0; i < height; i++) {
+
+    float inter = map(i, 0, height, 0, 1);
+
+    color c = lerpColor(
+      color(220, 210, 210),
+      color(210, 220, 220),
+      inter
+      );
+
+    stroke(c);
+
+    line(0, i, width, i);
+  }
+}
+
+// TÍTULO
+
+void drawTitle() {
+
+  textAlign(CENTER, CENTER);
+
+  textFont(titleFont);
+
+
+  // texto
+  fill(0);
+ 
+
+  text(
+    "Jogos Educativos",
+    width/2,
+    90
+    );
+
+  
+}
+
+
 void serialEvent(Serial p) {
+
   if (screenState == 1 && jogoLetras != null) {
     jogoLetras.handleSerialData(p);
   }
+
   else if (screenState == 1 && jogoMatematica != null) {
     jogoMatematica.handleSerialData(p);
   }
+
   else if (screenState == 1 && jogoCores != null) {
     jogoCores.handleSerialData(p);
-  } 
+  }
+
   else if (screenState == 1 && jogoTorres != null) {
     jogoTorres.handleSerialData(p);
   }
 }
 
+
 void mousePressed() {
+
   if (screenState == 0) {
+
     if (letrasButton.isOver()) {
       startLetrasGame();
     }
+
     if (matButton.isOver()) {
       startMatematicaGame();
     }
+
     if (coresButton.isOver()) {
       startCoresGame();
     }
-    if (torresButton.isOver()){
+
+    if (torresButton.isOver()) {
       startTorresGame();
     }
+
     if (exitButton.isOver()) {
       exit();
     }
   }
+
   else if (screenState == 1 && jogoLetras != null) {
     jogoLetras.mousePressed();
   }
+
   else if (screenState == 1 && jogoMatematica != null) {
     jogoMatematica.mousePressed();
   }
+
   else if (screenState == 1 && jogoCores != null) {
     jogoCores.mousePressed();
   }
+
   else if (screenState == 1 && jogoTorres != null) {
     jogoTorres.mousePressed();
   }
 }
 
+
 void startLetrasGame() {
+
   jogoLetras = new JogoLetras(this, myPort);
+
   jogoLetras.setup();
+
   screenState = 1;
 }
 
 void startMatematicaGame() {
+
   jogoMatematica = new JogoMatematica(this, myPort);
+
   jogoMatematica.setup();
+
   screenState = 1;
 }
 
 void startCoresGame() {
+
   jogoCores = new JogoCores(this, myPort);
+
   jogoCores.setup();
+
   screenState = 1;
 }
 
 void startTorresGame() {
+
   jogoTorres = new JogoTorres(this, myPort);
+
   jogoTorres.setup();
+
   screenState = 1;
 }
 
+
 void returnToMenu() {
+
   if (jogoLetras != null) {
+
     jogoLetras.stop();
+
     jogoLetras = null;
   }
+
   if (jogoMatematica != null) {
+
     jogoMatematica.stop();
+
     jogoMatematica = null;
   }
+
   if (jogoCores != null) {
+
     jogoCores.stop();
+
     jogoCores = null;
-  } 
+  }
+
   if (jogoTorres != null) {
+
     jogoTorres.stop();
+
     jogoTorres = null;
   }
-    screenState = 0;
+
+  screenState = 0;
 }
