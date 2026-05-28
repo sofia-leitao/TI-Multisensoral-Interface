@@ -136,8 +136,8 @@ class JogoCores {
       if (line != null) {
         line = line.trim();
         if (line.length() != 0 || !line.equals("B")) {
-          currentLine = line.substring(2);
-          println("Recebido: " + currentLine);
+          currentLine = line.substring(3);
+          println("Recebido: \"" + currentLine);
           hasLine = true;
           processarTag(currentLine);
         }
@@ -158,6 +158,7 @@ class JogoCores {
     else {
       myPort2.write("E\n");
       parent.delay(1000);
+      enviarCorLED(chosenColor);
     }
     hasLine = false;
   }
@@ -208,6 +209,9 @@ class JogoCores {
 
   void stop() {
     gameRunning = false;
+    if (myPort2 != null) {
+      myPort2.write("A");
+    }
     if (file != null) {
       file.stop();
     }

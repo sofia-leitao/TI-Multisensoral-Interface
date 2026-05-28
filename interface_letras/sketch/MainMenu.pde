@@ -21,30 +21,26 @@ PFont buttonFont;
 
 
 void setup() {
-  size(1000, 700);
+  fullScreen();
   smooth(8);
   titleFont = createFont("Arial Bold", 56);
   buttonFont = createFont("Arial", 24);
 
   letrasButton = new MenuButton(width/2 - 180, 180, 360, 70, "Jogo das Letras", color(255, 140, 70), color(255, 180, 100));
-
   matButton = new MenuButton(width/2 - 180, 280, 360, 70, "Jogo da Matemática", color(70, 170, 255), color(120, 210, 255));
-
   coresButton = new MenuButton(width/2 - 180, 380, 360, 70, "Jogo das Cores", color(255, 90, 170), color(255, 140, 200));
-
   torresButton = new MenuButton(width/2 - 180, 480, 360, 70, "Jogo das Torres", color(150, 100, 255), color(190, 150, 255));
-
   exitButton = new ExitButton(width - 130, height - 70, 100, 45, "Sair", color(255, 80, 80), color(255, 120, 120));
 
   printArray(Serial.list());
 
   if (Serial.list().length > 2) {
-    String portName1 = Serial.list()[2];
+    String portName1 = Serial.list()[3];
     myPort1 = new Serial(this, portName1, 9600);
     myPort1.bufferUntil('\n');
     myPort1.clear();
     
-    String portName2 = Serial.list()[2];
+    String portName2 = Serial.list()[4];
     myPort2 = new Serial(this, portName2, 9600);
     myPort2.bufferUntil('\n');
     myPort2.clear();

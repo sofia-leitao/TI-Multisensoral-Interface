@@ -9,30 +9,43 @@ class JogoMatematica {
   ExitButton gameExitButton;
   boolean gameRunning = true;
 
-  String[] numberTags = {
-    "TAG_0",
+  String[] numberTags1 = {
+    "04 74 A8 9F D9 2A 81",
     "04 A2 57 9F D9 2A 81",
     "04 BA 3E 9F D9 2A 81",
     "04 EF 43 9F D9 2A 81",
     "04 CB 3E 9F D9 2A 81",
     "04 C3 3E 9F D9 2A 81",
     "04 9A DC 9F D9 2A 81",
-    "TAG_7",
-    "TAG_8",
-    "TAG_9"
+    "04 BF E5 9F D9 2A 81",
+    "04 DF C5 9F D9 2A 81",
+    "04 D8 3B 9F D9 2A 81"
+  };
+  
+  String[] numberTags2 = {
+    "04 7C 71 9F D9 2A 81",
+    "04 69 DC 9F D9 2A 81",
+    "04 63 53 9F D9 2A 81",
+    "04 29 D2 9F D9 2A 81",
+    "04 DB 3E 9F D9 2A 81",
+    "04 C6 73 9F D9 2A 81",
+    "04 BF 3E 9F D9 2A 81",
+    "04 62 53 9F D9 2A 81",
+    "04 5C CC 9F D9 2A 81",
+    "04 68 2F 9F D9 2A 81"
   };
 
-  int num1;
-  int num2;
-  int resultado;
+  int num1, num2, resultado, reader;
   int respostaAtual = -1;
-  String operacao;
+  String operacao, tag; 
+  String[] resposta;
 
 
   JogoMatematica(PApplet parent, Serial myPort1, Serial myPort2) {
     this.parent = parent;
     this.myPort1 = myPort1;
     this.myPort2 = myPort2;
+    this.resposta = new String[3];
   }
 
 
@@ -78,7 +91,7 @@ class JogoMatematica {
     parent.fill(0);
     parent.textAlign(CENTER);
     parent.textSize(24);
-    parent.text("Resolve a conta usando as peças RFID", parent.width/2, 120);
+    parent.text("Resolve a conta usando as peças RFID, quando tiver colocado as peças carregue no botão para fazer a sua verificação.\n Caso o resultado tenha menos de 3 algarismos preencha os espaços à sua esquerda com 0.", parent.width/2, 120);
   }
 
 
@@ -124,11 +137,10 @@ class JogoMatematica {
       String line = p.readStringUntil('\n');
       if (line != null) {
         line = line.trim();
-        if (line.length() != 0 || !line.equals("B")) {
-          currentLine = line.substring(2);
-          println("Recebido: " + currentLine);
-          hasLine = true;
-          verificarResposta(currentLine);
+        if (line.length() != 0 && !line.equals("B")) {
+          processarTag(line);
+        } else if (line.equals("B")) {
+          verificarResposta();
         }
       }
     }
@@ -136,52 +148,81 @@ class JogoMatematica {
       e.printStackTrace();
     }
   }
+  
+  
+  void processarTag(String line) {
+    tag = line.substring(3);
+    reader = int(line.substring(0,1));
+    resposta[reader] = tag;
+    println("Recebido: \"" + tag);
+  }
 
 
-  void verificarResposta(String tag) {
-    int resposta = obterNumeroDaTag(tag);
-    respostaAtual = resposta;
-    println("Resposta: " + resposta);
-
-    // correta
-    if (resposta == resultado) {
-      if (myPort2 != null) {
-        myPort2.write("C\n");
+  void verificarResposta() {
+    println("resultado: " + str(resultado));
+    println("resposta: " +  resposta[0] + " | " + resposta[1] + " | " + resposta[2]);
+    int n_algarismos = countDigits(resultado);
+    println("digitos: " + str(n_algarismos));
+    
+    if (n_algarismos == 1) {
+      if ((resposta[0].equals(numberTags1[0]) || resposta[0].equals(numberTags2[0])) && 
+         (resposta[1].equals(numberTags1[0]) || resposta[1].equals(numberTags2[0]))  && 
+         (resposta[2].equals(numberTags1[resultado%10]) || resposta[2].equals(numberTags2[resultado%10]))) {
+        if (myPort2 != null) {
+            myPort2.write("C\n");
+        }
+        novaConta();
+      } else {
+        if (myPort2 != null) {
+            myPort2.write("E\n");
+        }
       }
-      parent.delay(1000);
-      respostaAtual = -1;
-      novaConta();
-    }
-
-    // errada
-    else {
-      if (myPort2 != null) {
-        myPort2.write("E\n");
+    } else if (n_algarismos == 2) {
+      if ((resposta[0].equals(numberTags1[0]) || resposta[0].equals(numberTags2[0])) && 
+         (resposta[1].equals(numberTags1[int(resultado/10)]) || resposta[1].equals(numberTags2[int(resultado/10)])) && 
+         (resposta[2].equals(numberTags1[resultado%10]) || resposta[2].equals(numberTags2[resultado%10]))) {
+        if (myPort2 != null) {
+            myPort2.write("C\n");
+        }
+        novaConta();
+      } else {
+        if (myPort2 != null) {
+            myPort2.write("E\n");
+        }
       }
-      parent.delay(1000);
+    } else {
+      if ((resposta[0].equals(numberTags1[int(resultado/100)]) || resposta[0].equals(numberTags2[int(resultado/100)])) && 
+          (resposta[1].equals(numberTags1[int(resultado/10)]) || resposta[1].equals(numberTags2[int(resultado/10)])) && 
+          (resposta[2].equals(numberTags1[resultado%10]) || resposta[2].equals(numberTags2[resultado%10]))) {
+        if (myPort2 != null) {
+            myPort2.write("C\n");
+        }
+        novaConta();
+      } else {
+        if (myPort2 != null) {
+            myPort2.write("E\n");
+        }
+      }
     }
     hasLine = false;
   }
 
 
-  int obterNumeroDaTag(String tag) {
-    for (int i = 0; i < numberTags.length; i++) {
-      if (tag.equals(numberTags[i])) {
-        return i;
-      }
-    }
-    return -1;
-  }
-
-
   void novaConta() {
+    if (resposta == null) {
+      resposta = new String[3];
+    }
     int tipo = int(parent.random(2));
-
+    
+    resposta[0] = "0";
+    resposta[1] = "0";
+    resposta[2] = "0";
+    
     // soma
     if (tipo == 0) {
       do {
-        num1 = int(parent.random(1, 10));
-        num2 = int(parent.random(1, 10));
+        num1 = int(parent.random(1, 50));
+        num2 = int(parent.random(1, 50));
         resultado = num1 + num2;
       }
       while (resultado > 10);
@@ -190,8 +231,8 @@ class JogoMatematica {
 
     // subtração
     else {
-      num1 = int(parent.random(1, 10));
-      num2 = int(parent.random(1, 10));
+      num1 = int(parent.random(1, 100));
+      num2 = int(parent.random(1, 100));
       if (num2 > num1) {
         int temp = num1;
         num1 = num2;
@@ -200,6 +241,11 @@ class JogoMatematica {
       resultado = num1 - num2;
       operacao = "-";
     }
+  }
+  
+  
+  int countDigits(int number) {
+    return str(abs(number)).length();
   }
 
 

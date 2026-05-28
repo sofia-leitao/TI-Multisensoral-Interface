@@ -8,12 +8,12 @@ class JogoTorres {
   boolean hasLine = false;
 
   String[][] tags = {
-    {"2", "1", "0"},
-    {"0", "1", "2"},
-    {"1", "0", "2"},
-    {"2", "0", "1"},
-    {"0", "1", "2"},
-    {"2", "1", "0"}
+    {"04 6D 2F 9F D9 2A 81", "04 68 DC 9F D9 2A 81", "04 C1 3E 9F D9 2A 81"},
+    {"04 C1 3E 9F D9 2A 81", "04 68 DC 9F D9 2A 81", "04 6D 2F 9F D9 2A 81"},
+    {"04 68 DC 9F D9 2A 81", "04 C1 3E 9F D9 2A 81", "04 6D 2F 9F D9 2A 81"},
+    {"04 6D 2F 9F D9 2A 81", "04 C1 3E 9F D9 2A 81", "04 68 DC 9F D9 2A 81"},
+    {"04 C1 3E 9F D9 2A 81", "04 68 DC 9F D9 2A 81", "04 6D 2F 9F D9 2A 81"},
+    {"04 6D 2F 9F D9 2A 81", "04 68 DC 9F D9 2A 81", "04 C1 3E 9F D9 2A 81"}
   };
 
   String[] instrucoes = {
@@ -127,7 +127,6 @@ class JogoTorres {
           // leitura RFID
           else {
             currentLine = line;
-            println(  "Recebido: " + currentLine);
             hasLine = true;
             processarTag(currentLine);
           }
@@ -141,12 +140,10 @@ class JogoTorres {
 
 
   void processarTag(String line) {
-    tag = line.substring(2);
+    tag = line.substring(3);
     reader = int(line.substring(0,1));
-    if (resposta[reader] == null ||
-      resposta[reader].equals("0") || !resposta[reader].equals(tag)) {
-      resposta[reader] = tag;
-    }
+    resposta[reader] = tag;
+    println("Recebido: \"" + tag);
   }
 
 

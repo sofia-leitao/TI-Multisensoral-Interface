@@ -161,10 +161,10 @@ class JogoLetras {
             file.play();
           }
         } else {
-          currentLine = line.substring(2);
+          currentLine = line.substring(3);
           hasLine = true;
         }
-        println("Received in game: " + currentLine);
+        println("Recebido: \"" + currentLine);
       }
       if (hasLine) {
         if (currentLine.equals(tags[chosenTag])) {

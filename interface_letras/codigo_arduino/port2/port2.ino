@@ -103,6 +103,10 @@ void serialEvent() {
   else if (comando == "B") {
     azul();
   }
+
+  else if (comando == "A") {
+    apagarLED();
+  }
 }
 
 
