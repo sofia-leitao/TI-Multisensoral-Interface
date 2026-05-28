@@ -75,15 +75,21 @@ void serialEvent() {
   
   // correto
   if (comando == "C") {
-    verde();
-    delay(2000);
-    apagarLED();
+    for (int i = 0; i < 5; i++) {
+      verde();
+      delay(200);
+      apagarLED();
+      delay(200);
+    }
   }
   // erro
   else if (comando == "E") {
-    vermelho();
-    delay(2000);
-    apagarLED();
+    for (int i = 0; i < 5; i++) {
+      vermelho();
+      delay(200);
+      apagarLED();
+      delay(200);
+    }
   }
   // vermelho
   else if (comando == "R") {
@@ -129,6 +135,7 @@ void apagarLED() {
 
 
 void printHex(byte *buffer, byte bufferSize) {
+  Serial.print("2-");
   for (byte i = 0; i < bufferSize; i++) {
     Serial.print(buffer[i] < 0x10 ? " 0" : " ");
     Serial.print(buffer[i], HEX);
