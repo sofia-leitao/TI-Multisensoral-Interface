@@ -74,9 +74,6 @@ class JogoTorres {
     parent.textSize(20);
     parent.text("Segue as instruções e coloca os objetos pela ordem correta nos seus respetivos sensores RFID", 20, 90);
 
-    parent.fill(255);
-    parent.textAlign(CENTER);
-    parent.textSize(42);
     parent.textAlign(LEFT);
     parent.textSize(18);
 
@@ -122,17 +119,19 @@ class JogoTorres {
   }
   
   void processarResposta() {
+    Boolean correct = true;
     for (int i = 0; i < 3; i++) {
       // resposta errada
       if (!resposta[i].equals(tags[rand][i])){
         if (myPort != null) {
-          myPort.write("C\n");
+          myPort.write("E\n");
+          correct = false;
         }
       }
     }
     // resposta dada esta certa
-    if (myPort != null) {
-        myPort.write("E\n");
+    if (myPort != null && correct) {
+        myPort.write("C\n");
     }
     startNewRound();
   }

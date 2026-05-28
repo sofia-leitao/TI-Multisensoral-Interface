@@ -1,4 +1,3 @@
-import processing.sound.*;
 import processing.serial.*;
 
 class JogoMatematica {
