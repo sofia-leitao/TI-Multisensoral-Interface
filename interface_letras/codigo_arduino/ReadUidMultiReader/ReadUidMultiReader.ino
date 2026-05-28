@@ -87,7 +87,7 @@ void serialEvent() {
 
   // correto
   if (comando == "C") {
-    for (int i = 0; i < 5; i ++) {}
+    for (int i = 0; i < 5; i ++) {
       verde();
       delay(200);
       apagarLED();
@@ -97,7 +97,7 @@ void serialEvent() {
 
   // erro
   else if (comando == "E") {
-    for (int i = 0; i < 5; i ++) {}
+    for (int i = 0; i < 5; i ++) {
       vermelho();
       delay(200);
       apagarLED();
