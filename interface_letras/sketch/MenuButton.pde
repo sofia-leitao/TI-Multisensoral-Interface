@@ -11,10 +11,7 @@ class MenuButton {
 
   boolean over;
 
-  float scaleFactor = 1.0;
-
-  // animação brilho
-  float glowAlpha = 0;
+  float anim = 0;
 
   MenuButton(
     int x,
@@ -24,7 +21,7 @@ class MenuButton {
     String label,
     color normalColor,
     color hoverColor
-  ) {
+    ) {
 
     this.x = x;
     this.y = y;
@@ -36,70 +33,75 @@ class MenuButton {
 
     this.normalColor = normalColor;
     this.hoverColor = hoverColor;
-
-    this.over = false;
   }
 
-
   void display() {
+
     update();
-    
-    // animação hover
+
+    // animação suave
     if (over) {
-      scaleFactor = lerp(scaleFactor, 1.06, 0.15);
-      glowAlpha = lerp(glowAlpha, 80, 0.12);
+      anim = lerp(anim, 1, 0.12);
     } else {
-      scaleFactor = lerp(scaleFactor, 1.0, 0.15);
-      glowAlpha = lerp(glowAlpha, 0, 0.12);
+      anim = lerp(anim, 0, 0.12);
     }
 
     pushMatrix();
+
+    float scaleValue = 1 + anim * 0.04;
+
     translate(x + w/2, y + h/2);
-    scale(scaleFactor);
+
+    scale(scaleValue);
+
     rectMode(CENTER);
+
     noStroke();
 
-    // glow
-    fill(255, glowAlpha * 0.2);
-    rect(0, 0, w + 26, h + 26, 26);
-    fill(255, glowAlpha * 0.1);
-    rect(0, 0, w + 40, h + 40, 30);
+    // sombra suave
+    fill(0, 60);
+    rect(0, 8, w, h, 30);
 
-    // sombra
-    fill(0, 120);
-    rect(6, 8, w, h, 22);
+    // cor animada
+    color currentColor = lerpColor(
+      normalColor,
+      hoverColor,
+      anim
+      );
 
-    // botao
-    if (over) {
-      fill(hoverColor);
-    } else {
-      fill(normalColor);
-    }
-    rect(0, 0, w, h, 22);
+    // botão principal
+    fill(currentColor);
+    rect(0, 0, w, h, 30);
 
-    // brilho no topo
+    // detalhe topo
     fill(255, 35);
-    rect(0, -h/4, w - 18, h/3, 18);
+    rect(0, -h/4, w - 20, h/2.8, 20);
 
-    // bordas
-    stroke(255, 40);
-    strokeWeight(2);
-    noFill();
-    rect(0, 0, w, h, 22);
-    noStroke();
+    // linha inferior
+    fill(255, 30);
+    rect(0, h/2 - 6, w - 30, 4, 10);
+
+    // ícone lateral
+    fill(255, 40);
+
+    ellipse(-w/2 + 35, 0, 18, 18);
 
     // texto
-    fill(0, 80);
     textAlign(CENTER, CENTER);
+
     textSize(24);
-    text(label, 2, 3);
-    fill(textColor);
-    text(label, 0, 0);
+
+    fill(255);
+
+    text(label, 10, 0);
+
     popMatrix();
+
     rectMode(CORNER);
+
     textAlign(LEFT, BASELINE);
   }
-  
+
   void update() {
 
     over =
@@ -110,6 +112,7 @@ class MenuButton {
   }
 
   boolean isOver() {
+
     return over;
   }
 }

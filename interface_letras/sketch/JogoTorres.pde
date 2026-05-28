@@ -6,9 +6,11 @@ class JogoTorres {
   Serial myPort;
 
   String currentLine = "";
+
   boolean hasLine = false;
 
   String[][] tags = {
+
     {"2", "1", "0"},
     {"0", "1", "2"},
     {"1", "0", "2"},
@@ -16,161 +18,341 @@ class JogoTorres {
     {"0", "1", "2"},
     {"2", "1", "0"}
   };
-  
+
   String[] instrucoes = {
-    "Ao olhar pelo lado esquerdo da caixa só se pode ser capaz de ver 1 torre.\n",
-    "Ao olhar pelo lado direito da caixa só se pode ser capaz de ver 1 torre.\n",
-    "Ao olhar pelo lado esquerdo da caixa só se pode ser capaz de ver 2 torres.\n",
-    "Ao olhar pelo lado direito da caixa só se pode ser capaz de ver 2 torres.\n",
-    "Ao olhar pelo lado esquerdo da caixa todas as torres tem que ser visíveis.\n",
-    "Ao olhar pelo lado direito da caixa todas as torres tem que ser visíveis.\n"
-  };
-  
-  String instrucaoEscolhida;
-  String[] resposta;
-  
-  int reader;
-  String tag;
-  int rand;
-  
-  color[] displayColors = {
-    color(255, 0, 0),
-    color(0, 255, 0),
-    color(0, 0, 255)
+
+    "Ao olhar pelo lado esquerdo da caixa\nsó consegues ver 1 torre.",
+
+    "Ao olhar pelo lado direito da caixa\nsó consegues ver 1 torre.",
+
+    "Ao olhar pelo lado esquerdo da caixa\nconsegues ver 2 torres.",
+
+    "Ao olhar pelo lado direito da caixa\nconsegues ver 2 torres.",
+
+    "Ao olhar pelo lado esquerdo da caixa\ntodas as torres têm de ser visíveis.",
+
+    "Ao olhar pelo lado direito da caixa\ntodas as torres têm de ser visíveis."
   };
 
-  color bgColor = color(0);
+  String instrucaoEscolhida;
+
+  String[] resposta;
+
+  int reader;
+
+  String tag;
+
+  int rand;
+
   ExitButton gameExitButton;
+
   boolean gameRunning = true;
 
+  // =====================================================
 
   JogoTorres(PApplet parent, Serial myPort) {
+
     this.parent = parent;
+
     this.myPort = myPort;
-    this.resposta = new String[3];  // Initialize the array here
+
+    this.resposta = new String[3];
   }
 
+  // =====================================================
 
   void setup() {
+
     gameExitButton = new ExitButton(
-      710, 550,
-      70, 40,
+      840,
+      620,
+      120,
+      50,
       "MENU",
-      parent.color(150, 0, 0),
-      parent.color(200, 0, 0)
-    );
+      parent.color(255, 90, 90),
+      parent.color(255, 130, 130)
+      );
 
     startNewRound();
   }
 
+  // =====================================================
 
   void run() {
+
     if (!gameRunning) return;
-    parent.background(bgColor);
-    parent.fill(255);
-    parent.textSize(30);
-    parent.text("Jogo das Torres", 20, 40);
 
-    parent.textSize(20);
-    parent.text("Segue as instruções e coloca os objetos pela ordem correta nos seus respetivos sensores RFID, quando tiveres as peças nos lugares certos pressiona o botão.", 20, 90);
-    parent.text(instrucaoEscolhida, 20, 140);
+    drawBackground();
 
-    parent.textAlign(LEFT);
-    parent.textSize(18);
+    drawTitle();
 
-    parent.text(
-      "Última tag: " + (hasLine ? currentLine : "nenhuma"),
-      20,
-      530
-    );
+    drawInstruction();
+
+    drawTowerCard();
+
+    drawTagInfo();
 
     gameExitButton.display();
   }
 
+  // =====================================================
+  // BACKGROUND
+  // =====================================================
+
+  void drawBackground() {
+
+    for (int i = 0; i < parent.height; i++) {
+
+      float inter =
+        map(i, 0, parent.height, 0, 1);
+
+      color c = lerpColor(
+        color(220, 210, 210),
+        color(210, 220, 220),
+        inter
+        );
+
+      parent.stroke(c);
+
+      parent.line(0, i, parent.width, i);
+    }
+  }
+
+
+  void drawTitle() {
+
+    parent.textAlign(CENTER, CENTER);
+
+    parent.textSize(44);
+
+
+    parent.fill(0);
+
+    parent.text(
+      "Jogo das Torres",
+      parent.width/2,
+      60
+      );
+  }
+
+
+  void drawInstruction() {
+
+    parent.fill(0);
+
+    parent.textAlign(CENTER);
+
+    parent.textSize(24);
+
+    parent.text(
+      "Coloca as torres na ordem correta",
+      parent.width/2,
+      120
+      );
+  }
+
+
+  void drawTowerCard() {
+
+    parent.pushMatrix();
+
+    parent.translate(parent.width/2, 340);
+
+    parent.rectMode(CENTER);
+
+    parent.noStroke();
+
+    // texto
+    parent.fill(0);
+
+    parent.textAlign(CENTER, CENTER);
+
+    parent.textSize(28);
+
+    parent.text(
+      instrucaoEscolhida,
+      0,
+      -20
+      );
+
+    parent.textSize(20);
+
+    parent.fill(70);
+
+    parent.text(
+      "Depois pressiona o botão",
+      0,
+      70
+      );
+
+    parent.popMatrix();
+
+    parent.rectMode(CORNER);
+  }
+
+
+  void drawTagInfo() {
+
+    parent.textAlign(CENTER);
+
+    parent.textSize(18);
+
+    parent.fill(40);
+
+    parent.text(
+      "Última tag: "
+      + (hasLine ? currentLine : "nenhuma"),
+      parent.width/2,
+      590
+      );
+  }
+
 
   void handleSerialData(Serial p) {
+
     try {
-      String line = p.readStringUntil('\n');
+
+      String line =
+        p.readStringUntil('\n');
+
       if (line != null) {
+
         line = line.trim();
+
         if (line.length() != 0) {
-          if (!line.equals("B")) {
-          currentLine = line;
-          println("Recebido: " + currentLine);
-          hasLine = true;
-          processarTag(currentLine); // executar a lógica do jogo
-          } else { // botao foi pressionado, queremos ver se as peças estao no sitio correto
+
+          // botão pressionado
+          if (line.equals("B")) {
+
             processarResposta();
+          }
+
+          // leitura RFID
+          else {
+
+            currentLine = line;
+
+            println(
+              "Recebido: "
+              + currentLine
+              );
+
+            hasLine = true;
+
+            processarTag(currentLine);
           }
         }
       }
-    } catch (Exception e) {
+    }
+
+    catch(Exception e) {
+
       e.printStackTrace();
     }
   }
 
+
   void processarTag(String line) {
-    tag = line.substring(2);
-    reader = int(line.substring(0,1));
-    
-    // para nao estarmos sempre a alterar o valor caso o armazenado ja seja esse mesmo
-    if (resposta[reader].equals("0") || !resposta[reader].equals(tag)){
+
+    tag =
+      line.substring(2);
+
+    reader =
+      int(line.substring(0,1));
+
+    if (resposta[reader] == null ||
+      resposta[reader].equals("0") ||
+      !resposta[reader].equals(tag)) {
+
       resposta[reader] = tag;
     }
   }
-  
+
+
   void processarResposta() {
-    Boolean correct = true;
+
+    boolean correct = true;
+
     for (int i = 0; i < 3; i++) {
-      // resposta errada
-      if (!resposta[i].equals(tags[rand][i])){
+
+      if (!resposta[i].equals(tags[rand][i])) {
+
+        correct = false;
+
         if (myPort != null) {
+
           myPort.write("E\n");
-          correct = false;
         }
       }
     }
-    // resposta dada esta certa
-    if (myPort != null && correct) {
+
+    if (correct) {
+
+      if (myPort != null) {
+
         myPort.write("C\n");
+      }
     }
+
+    parent.delay(1000);
+
     startNewRound();
   }
 
+
   String normalizeTag(String t) {
+
     t = t.replace("\r", "");
+
     t = t.replace("\n", "");
+
     t = t.trim();
+
     return t;
   }
 
 
-
   void startNewRound() {
+
     if (resposta == null) {
-        resposta = new String[3];
+
+      resposta = new String[3];
     }
-    rand = (int) random(0,7);
-    instrucaoEscolhida = instrucoes[rand];
+
+    rand =
+      int(parent.random(0, 6));
+
+    instrucaoEscolhida =
+      instrucoes[rand];
+
     resposta[0] = "0";
+
     resposta[1] = "0";
+
     resposta[2] = "0";
 
     currentLine = "";
-    hasLine = false;
 
+    hasLine = false;
   }
 
+
   void mousePressed() {
+
     if (gameExitButton.isOver()) {
+
       gameRunning = false;
-      MainMenu mainMenu = (MainMenu) parent;
+
+      MainMenu mainMenu =
+        (MainMenu) parent;
+
       mainMenu.returnToMenu();
     }
   }
 
 
   void stop() {
+
     gameRunning = false;
   }
 }
