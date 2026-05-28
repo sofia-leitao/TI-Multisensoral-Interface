@@ -32,7 +32,7 @@ void setup() {
 
   SPI.begin();        // Init SPI bus
 
-  for (uint8_t reader = 0; reader < NR_OF_READERS; reader++) {
+  for (int reader = 0; reader < NR_OF_READERS; reader++) {
     mfrc522[reader].PCD_Init(ssPins[reader], RST_PIN); // Init each MFRC522 card
   }
 
@@ -50,7 +50,7 @@ void loop() {
     if (!mfrc522[reader].PICC_ReadCardSerial()) continue;
     
     // encontrou uma tag
-    Serial.print(reader + "-");
+    Serial.print(String(reader) + "-");
     printHex(mfrc522[reader].uid.uidByte, mfrc522[reader].uid.size);
     Serial.println();
     
