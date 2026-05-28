@@ -158,7 +158,6 @@ void drawTitle() {
 
   textFont(titleFont);
 
-
   // texto
   fill(0);
  

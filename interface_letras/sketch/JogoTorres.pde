@@ -135,7 +135,6 @@ class JogoTorres {
       );
   }
 
-
   void drawInstruction() {
 
     parent.fill(0);

@@ -2,9 +2,9 @@
 #include <MFRC522.h>
 
 #define RST_PIN         9         
-#define SS_1_PIN        10        
+#define SS_1_PIN        7        
 #define SS_2_PIN        8          
-#define SS_3_PIN        7
+#define SS_3_PIN        10
 
 #define NR_OF_READERS   1
 

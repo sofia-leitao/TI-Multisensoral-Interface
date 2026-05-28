@@ -7,7 +7,7 @@ class JogoCores {
   Serial myPort;
 
   String currentLine = "";
-
+  
   boolean hasLine = false;
 
   SoundFile file;

@@ -12,7 +12,7 @@ class MenuButton {
   boolean over;
 
   float anim = 0;
-
+ 
   MenuButton(
     int x,
     int y,

@@ -157,7 +157,6 @@ class JogoMatematica {
   }
 
 
-
   void drawConta() {
 
     parent.textAlign(CENTER, CENTER);
