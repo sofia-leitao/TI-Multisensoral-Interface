@@ -150,6 +150,9 @@ void mousePressed() {
   else if (screenState == 1 && jogoCores != null) {
     jogoCores.mousePressed();
   }
+  else if (screenState == 1 && jogoTorres != null) {
+    jogoTorres.mousePressed();
+  }
 }
 
 void startLetrasGame() {

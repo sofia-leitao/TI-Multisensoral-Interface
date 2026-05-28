@@ -8,7 +8,6 @@ class JogoTorres {
   String currentLine = "";
   boolean hasLine = false;
 
-  // torre pequena -> media -> grande
   String[][] tags = {
     {"2", "1", "0"},
     {"0", "1", "2"},
@@ -48,6 +47,7 @@ class JogoTorres {
   JogoTorres(PApplet parent, Serial myPort) {
     this.parent = parent;
     this.myPort = myPort;
+    this.resposta = new String[3];  // Initialize the array here
   }
 
 
@@ -72,7 +72,8 @@ class JogoTorres {
     parent.text("Jogo das Torres", 20, 40);
 
     parent.textSize(20);
-    parent.text("Segue as instruções e coloca os objetos pela ordem correta nos seus respetivos sensores RFID", 20, 90);
+    parent.text("Segue as instruções e coloca os objetos pela ordem correta nos seus respetivos sensores RFID, quando tiveres as peças nos lugares certos pressiona o botão.", 20, 90);
+    parent.text(instrucaoEscolhida, 20, 140);
 
     parent.textAlign(LEFT);
     parent.textSize(18);
@@ -146,7 +147,10 @@ class JogoTorres {
 
 
   void startNewRound() {
-    rand = (int) random(0,10);
+    if (resposta == null) {
+        resposta = new String[3];
+    }
+    rand = (int) random(0,7);
     instrucaoEscolhida = instrucoes[rand];
     resposta[0] = "0";
     resposta[1] = "0";
