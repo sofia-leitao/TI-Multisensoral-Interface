@@ -169,10 +169,16 @@ class JogoLetras {
       if (hasLine) {
         if (currentLine.equals(tags[chosenTag])) {
           parent.delay(1000);
+          if (myPort2 != null) {
+            myPort2.write("C\n");
+          }
           startNewRound();
         }
         else {
           parent.delay(1000);
+          if (myPort2 != null) {
+            myPort2.write("E\n");
+          }
           if (file != null) {
             file.play();
           }
