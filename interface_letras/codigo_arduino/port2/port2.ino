@@ -8,12 +8,12 @@
 MFRC522 rfid1(SS_1, RST_1);
 
 // LED RGB
-#define LED_R 6
+#define LED_R 8
 #define LED_G 7
-#define LED_B 3
+#define LED_B 6
 
 // botão
-int botao = 4;
+int botao = 5;
 
 int buttonState;
 int lastButtonState = LOW;
