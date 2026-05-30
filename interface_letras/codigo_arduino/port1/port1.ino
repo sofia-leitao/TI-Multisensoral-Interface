@@ -1,9 +1,12 @@
+// ligar porto 2 num porto menor q o porto 1 !!
+// ex: porto2 - 1300 e porto1 - 1400
+
 #include <SPI.h>
 #include <MFRC522.h>
 
 #define RST_PIN         9         
 #define SS_1_PIN        10        
-#define SS_2_PIN        8          
+#define SS_2_PIN        5        
 
 #define NR_OF_READERS   2
 
