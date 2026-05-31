@@ -65,6 +65,18 @@ class JogoLetras {
     "../Letras/Z.mp3"
   };
 
+String getNomeTag(String uid) {
+
+  for (int i = 0; i < tags.length; i++) {
+
+    if (uid.equals(tags[i])) {
+      return pieceNames[i];
+    }
+  }
+
+  return uid;
+}
+
   int chosenTag;
   ExitButton gameExitButton;
   boolean gameRunning = true;
@@ -78,9 +90,22 @@ class JogoLetras {
 
 
   void setup() {
-    gameExitButton = new ExitButton(840, 620, 120, 50, "MENU", parent.color(255, 90, 90), parent.color(255, 130, 130));
-    startNewRound();
-  }
+
+  float exitW = parent.width * 0.08;
+  float exitH = parent.height * 0.06;
+
+  gameExitButton = new ExitButton(
+    parent.width - exitW - parent.width * 0.02,
+    parent.height - exitH - parent.height * 0.02,
+    exitW,
+    exitH,
+    "MENU",
+    parent.color(255, 90, 90),
+    parent.color(255, 130, 130)
+  );
+
+  startNewRound();
+}
 
 
   void run() {
@@ -105,47 +130,105 @@ class JogoLetras {
 
 
   void drawTitle() {
-    parent.textAlign(CENTER, CENTER);
-    parent.textSize(44);
-    
-    // texto
-    parent.fill(0);
-    parent.text("Jogo das Letras", parent.width/2, 60);
-  }
+
+  parent.textAlign(CENTER, CENTER);
+
+  parent.textSize(parent.height * 0.06);
+
+  parent.fill(0);
+
+  parent.text(
+    "Jogo das Letras",
+    parent.width / 2,
+    parent.height * 0.08
+  );
+}
 
 
   void drawLetterCard() {
-    parent.pushMatrix();
-    parent.translate(parent.width/2, 290);
-    parent.rectMode(CENTER);
 
-    // letra
-    parent.fill(0);
-    parent.textAlign(CENTER, CENTER);
-    parent.textSize(100);
-    parent.text(pieceNames[chosenTag], 0, -10);
-    parent.popMatrix();
-    parent.rectMode(CORNER);
-  }
+  parent.pushMatrix();
 
+  parent.translate(
+    parent.width / 2,
+    parent.height * 0.40
+  );
+
+  parent.textAlign(CENTER, CENTER);
+
+  parent.fill(0);
+
+  parent.textSize(parent.height * 0.18);
+
+  parent.text(
+    pieceNames[chosenTag],
+    0,
+    0
+  );
+
+  parent.popMatrix();
+}
 
   void drawInstructions() {
-    parent.textAlign(CENTER);
-    parent.fill(0);
-    parent.textSize(24);
-    parent.text("Passa a letra correta no RFID", parent.width/2, 470);
-    parent.textSize(18);
-    parent.text("Carrega no botão para ouvir o som novamente", parent.width/2, 510);
+
+  parent.textAlign(CENTER);
+
+  parent.fill(0);
+
+  parent.textSize(parent.height * 0.03);
+
+  parent.text(
+    "Passa a letra correta no RFID",
+    parent.width / 2,
+    parent.height * 0.65
+  );
+
+  parent.textSize(parent.height * 0.022);
+
+  parent.text(
+    "Carrega no botão para ouvir o som novamente",
+    parent.width / 2,
+    parent.height * 0.71
+  );
+}
+
+
+//  void drawLastTag() {
+
+//  parent.textAlign(LEFT);
+
+//  parent.fill(40);
+
+//  parent.textSize(parent.height * 0.02);
+
+//  parent.text(
+//    "Última tag: " +
+//    (hasLine ? currentLine : "nenhuma"),
+//    parent.width * 0.02,
+//    parent.height * 0.95
+//  );
+//}
+
+void drawLastTag() {
+
+  parent.textAlign(LEFT);
+
+  parent.fill(40);
+
+  parent.textSize(parent.height * 0.02);
+
+  String textoTag = "nenhuma";
+
+  if (hasLine) {
+    textoTag = getNomeTag(currentLine);
   }
 
-
-  void drawLastTag() {
-    parent.textAlign(LEFT);
-    parent.fill(40);
-    parent.textSize(18);
-    parent.text("Última tag: " + (hasLine ? currentLine : "nenhuma"), 30, 650);
-  }
-
+  parent.text(
+    "Última tag: " + textoTag,
+    parent.width * 0.02,
+    parent.height * 0.95
+  );
+}
 
   void handleSerialData(Serial p) {
     try {

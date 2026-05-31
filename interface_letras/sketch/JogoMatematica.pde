@@ -35,6 +35,20 @@ class JogoMatematica {
     "04 68 2F 9F D9 2A 81"
   };
 
+String getNomeTag(String uid) {
+
+  for (int i = 0; i < 10; i++) {
+
+    if (uid.equals(numberTags1[i]) ||
+        uid.equals(numberTags2[i])) {
+
+      return str(i);
+    }
+  }
+
+  return uid;
+}
+
   int num1, num2, resultado, reader;
   int respostaAtual = -1;
   String operacao, tag; 
@@ -50,9 +64,22 @@ class JogoMatematica {
 
 
   void setup() {
-    gameExitButton = new ExitButton(840, 620, 120, 50, "MENU", parent.color(255, 90, 90), parent.color(255, 130, 130));
-    novaConta();
-  }
+
+  float exitW = parent.width * 0.08;
+  float exitH = parent.height * 0.06;
+
+  gameExitButton = new ExitButton(
+    parent.width - exitW - parent.width * 0.02,
+    parent.height - exitH - parent.height * 0.02,
+    exitW,
+    exitH,
+    "MENU",
+    parent.color(255, 90, 90),
+    parent.color(255, 130, 130)
+  );
+
+  novaConta();
+}
 
 
   void run() {
@@ -79,21 +106,35 @@ class JogoMatematica {
 
 
   void drawTitle() {
-    parent.textAlign(CENTER, CENTER);
-    parent.textSize(44);
-    parent.fill(120);
-    parent.fill(0);
-    parent.text("Jogo da Matemática", parent.width/2, 60);
-  }
+
+  parent.textAlign(CENTER, CENTER);
+
+  parent.textSize(parent.height * 0.06);
+
+  parent.fill(0);
+
+  parent.text(
+    "Jogo da Matemática",
+    parent.width / 2,
+    parent.height * 0.08
+  );
+}
 
 
   void drawInstruction() {
-    parent.fill(0);
-    parent.textAlign(CENTER);
-    parent.textSize(24);
-    parent.text("Resolve a conta usando as peças RFID, quando tiver colocado as peças carregue no botão para fazer a sua verificação.\n Caso o resultado tenha menos de 3 algarismos preencha os espaços à sua esquerda com 0.", parent.width/2, 120);
-  }
 
+  parent.fill(0);
+
+  parent.textAlign(CENTER);
+
+  parent.textSize(parent.height * 0.025);
+
+  parent.text(
+    "Resolve a conta usando as peças disponíveis.\nQuando as peças estiverem todas colocadas, carrega no botão para verificar a tua resposta.\nSe o resultado tiver menos de 3 algarismos, preenche os espaços à esquerda com 0.",
+    parent.width / 2,
+    parent.height * 0.18
+  );
+}
 
   void drawMathCard() {
     parent.pushMatrix();
@@ -106,30 +147,60 @@ class JogoMatematica {
 
 
   void drawConta() {
-    parent.textAlign(CENTER, CENTER);
-    parent.textSize(70);
-    parent.fill(0);
-    parent.text(num1 + " " + operacao + " " + num2 + " = ?", parent.width/2, 320);
-  }
+
+  parent.textAlign(CENTER, CENTER);
+
+  parent.textSize(parent.height * 0.10);
+
+  parent.fill(0);
+
+  parent.text(
+    num1 + " " + operacao + " " + num2 + " = ?",
+    parent.width / 2,
+    parent.height * 0.45
+  );
+}
 
 
   void drawResposta() {
-    parent.textAlign(CENTER);
-    parent.textSize(32);
-    parent.fill(40);
 
-    if (respostaAtual != -1) {
-      parent.text("Resposta: " + respostaAtual, parent.width/2, 500);
-    }
+  parent.textAlign(CENTER);
+
+  parent.textSize(parent.height * 0.04);
+
+  parent.fill(40);
+
+  if (respostaAtual != -1) {
+
+    parent.text(
+      "Resposta: " + respostaAtual,
+      parent.width / 2,
+      parent.height * 0.70
+    );
   }
+}
 
 
   void drawTagInfo() {
-    parent.textAlign(CENTER);
-    parent.textSize(18);
-    parent.fill(40);
-    parent.text("Última tag: " + (hasLine ? currentLine : "nenhuma"), parent.width/2, 560);
-  }
+
+  parent.textAlign(CENTER);
+
+  parent.textSize(parent.height * 0.02);
+
+  parent.fill(40);
+
+  String textoTag = "nenhuma";
+
+if (hasLine) {
+  textoTag = getNomeTag(currentLine);
+}
+
+parent.text(
+  "Última tag: " + textoTag,
+  parent.width / 2,
+  parent.height * 0.80
+);
+}
 
 
   void handleSerialData(Serial p) {
@@ -221,11 +292,11 @@ class JogoMatematica {
     // soma
     if (tipo == 0) {
       do {
-        num1 = int(parent.random(1, 50));
-        num2 = int(parent.random(1, 50));
-        resultado = num1 + num2;
-      }
-      while (resultado > 10);
+  num1 = int(parent.random(1, 50));
+  num2 = int(parent.random(1, 50));
+  resultado = num1 + num2;
+}
+while (resultado > 999);
       operacao = "+";
     }
 

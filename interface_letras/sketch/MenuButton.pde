@@ -1,5 +1,7 @@
 class MenuButton {
-  int x, y, w, h;
+
+  float x, y, w, h;
+
   String label;
 
   color normalColor;
@@ -10,8 +12,12 @@ class MenuButton {
   boolean over;
 
   float anim = 0;
- 
-  MenuButton(int x, int y, int w, int h, String label, color normalColor, color hoverColor) {
+
+  MenuButton(float x, float y, float w, float h,
+             String label,
+             color normalColor,
+             color hoverColor) {
+
     this.x = x;
     this.y = y;
 
@@ -24,8 +30,8 @@ class MenuButton {
     this.hoverColor = hoverColor;
   }
 
-
   void display() {
+
     update();
 
     if (over) {
@@ -34,41 +40,71 @@ class MenuButton {
       anim = lerp(anim, 0, 0.12);
     }
 
+    float radius = h * 0.40;
+
     pushMatrix();
+
     float scaleValue = 1 + anim * 0.04;
+
     translate(x + w/2, y + h/2);
+
     scale(scaleValue);
+
     rectMode(CENTER);
     noStroke();
 
-    // sombra suave
+    // sombra
     fill(0, 60);
-    rect(0, 8, w, h, 30);
+    rect(0, h * 0.10, w, h, radius);
 
     // cor animada
-    color currentColor = lerpColor(normalColor, hoverColor, anim);
+    color currentColor =
+      lerpColor(normalColor, hoverColor, anim);
 
     // botão principal
     fill(currentColor);
-    rect(0, 0, w, h, 30);
+    rect(0, 0, w, h, radius);
 
-    // detalhe topo
+    // brilho superior
     fill(255, 35);
-    rect(0, -h/4, w - 20, h/2.8, 20);
+    rect(
+      0,
+      -h * 0.25,
+      w * 0.90,
+      h * 0.35,
+      radius * 0.7
+    );
 
     // linha inferior
     fill(255, 30);
-    rect(0, h/2 - 6, w - 30, 4, 10);
+    rect(
+      0,
+      h * 0.42,
+      w * 0.85,
+      h * 0.05,
+      radius * 0.3
+    );
 
     // ícone lateral
     fill(255, 40);
-    ellipse(-w/2 + 35, 0, 18, 18);
+
+    float iconSize = h * 0.25;
+
+    ellipse(
+      -w * 0.42,
+      0,
+      iconSize,
+      iconSize
+    );
 
     // texto
+    fill(textColor);
     textAlign(CENTER, CENTER);
-    textSize(24);
-    fill(255);
-    text(label, 10, 0);
+
+    textSize(h * 0.35);
+
+    text(label, 0, 0);
+
     popMatrix();
 
     rectMode(CORNER);
@@ -76,6 +112,7 @@ class MenuButton {
   }
 
   void update() {
+
     over =
       mouseX >= x &&
       mouseX <= x + w &&
