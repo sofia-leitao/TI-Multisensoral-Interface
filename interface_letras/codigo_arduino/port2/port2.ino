@@ -139,7 +139,7 @@ void apagarLED() {
 
 
 void printHex(byte *buffer, byte bufferSize) {
-  Serial.print("2-");
+  Serial.print("0-");
   for (byte i = 0; i < bufferSize; i++) {
     Serial.print(buffer[i] < 0x10 ? " 0" : " ");
     Serial.print(buffer[i], HEX);

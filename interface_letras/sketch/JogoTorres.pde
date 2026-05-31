@@ -29,7 +29,7 @@ class JogoTorres {
 String getNomeTag(String uid) {
 
   if (uid.equals("04 6D 2F 9F D9 2A 81")) {
-    return "TORRE PEQUENA";
+    return "TORRE GRANDE";
   }
 
   if (uid.equals("04 68 DC 9F D9 2A 81")) {
@@ -37,7 +37,7 @@ String getNomeTag(String uid) {
   }
 
   if (uid.equals("04 C1 3E 9F D9 2A 81")) {
-    return "TORRE GRANDE";
+    return "TORRE PEQUENA";
   }
 
   return uid;

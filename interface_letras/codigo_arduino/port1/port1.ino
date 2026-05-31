@@ -33,7 +33,11 @@ void loop() {
     if (!mfrc522[reader].PICC_ReadCardSerial()) continue;
     
     // encontrou uma tag
-    Serial.print(String(reader) + "-");
+    if (reader == 1) {
+      Serial.print(String(reader) + "-");
+    } else {
+      Serial.print(String(2) + "-");
+    }
     printHex(mfrc522[reader].uid.uidByte, mfrc522[reader].uid.size);
     Serial.println();
     
