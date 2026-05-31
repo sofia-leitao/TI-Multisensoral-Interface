@@ -8,13 +8,13 @@ class JogoTorres {
   String currentLine = "";
   boolean hasLine = false;
 
-  String[][] tags = {
-    {"04 6D 2F 9F D9 2A 81", "04 68 DC 9F D9 2A 81", "04 C1 3E 9F D9 2A 81"},
-    {"04 C1 3E 9F D9 2A 81", "04 68 DC 9F D9 2A 81", "04 6D 2F 9F D9 2A 81"},
-    {"04 68 DC 9F D9 2A 81", "04 C1 3E 9F D9 2A 81", "04 6D 2F 9F D9 2A 81"},
-    {"04 6D 2F 9F D9 2A 81", "04 C1 3E 9F D9 2A 81", "04 68 DC 9F D9 2A 81"},
-    {"04 C1 3E 9F D9 2A 81", "04 68 DC 9F D9 2A 81", "04 6D 2F 9F D9 2A 81"},
-    {"04 6D 2F 9F D9 2A 81", "04 68 DC 9F D9 2A 81", "04 C1 3E 9F D9 2A 81"}
+  String[][][] tags = {
+    {{"04 6D 2F 9F D9 2A 81", "04 68 DC 9F D9 2A 81", "04 C1 3E 9F D9 2A 81"}},
+    {{"04 C1 3E 9F D9 2A 81", "04 68 DC 9F D9 2A 81", "04 6D 2F 9F D9 2A 81"}},
+    {{"04 68 DC 9F D9 2A 81", "04 C1 3E 9F D9 2A 81", "04 6D 2F 9F D9 2A 81"}, {"04 C1 3E 9F D9 2A 81", "04 6D 2F 9F D9 2A 81", "04 68 DC 9F D9 2A 81"}, {"04 68 DC 9F D9 2A 81", "04 6D 2F 9F D9 2A 81", "04 C1 3E 9F D9 2A 81"}},
+    {{"04 6D 2F 9F D9 2A 81", "04 C1 3E 9F D9 2A 81", "04 68 DC 9F D9 2A 81"}, {"04 C1 3E 9F D9 2A 81", "04 6D 2F 9F D9 2A 81", "04 68 DC 9F D9 2A 81"}, {"04 68 DC 9F D9 2A 81", "04 6D 2F 9F D9 2A 81", "04 C1 3E 9F D9 2A 81"}},
+    {{"04 C1 3E 9F D9 2A 81", "04 68 DC 9F D9 2A 81", "04 6D 2F 9F D9 2A 81"}},
+    {{"04 6D 2F 9F D9 2A 81", "04 68 DC 9F D9 2A 81", "04 C1 3E 9F D9 2A 81"}}
   };
 
   String[] instrucoes = {
@@ -246,33 +246,23 @@ parent.text(
   }
 
   void processarResposta() {
-
-    for (int i = 0; i < 3; i++) {
-
-      if (resposta[i] == null) {
-        return;
-      }
-    }
-
     boolean correct = true;
 
-    for (int i = 0; i < 3; i++) {
-
-      if (!resposta[i].equals(tags[rand][i])) {
-
-        correct = false;
-        break;
+    for (int i = 0; i < tags[rand].length; i++) {
+      for (int c = 0; c < 3; c++) {
+        if (!resposta[i].equals(tags[rand][i][c])) {
+          correct = false;
+          break;
+        }
       }
     }
 
     if (correct) {
-
       if (myPort2 != null) {
         myPort2.write("C\n");
       }
     }
     else {
-
       if (myPort2 != null) {
         myPort2.write("E\n");
       }

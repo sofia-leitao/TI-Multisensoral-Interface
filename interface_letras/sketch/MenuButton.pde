@@ -100,6 +100,7 @@ class MenuButton {
     // texto
     fill(textColor);
     textAlign(CENTER, CENTER);
+    textFont(createFont("Arial", int(height * 0.03)));
 
     textSize(h * 0.35);
 

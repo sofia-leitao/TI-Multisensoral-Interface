@@ -25,7 +25,6 @@ void setup() {
   smooth(8);
 
   titleFont = createFont("MS Sans Serif 1", int(height * 0.07));
-  buttonFont = createFont("Arial", int(height * 0.03));
 
   // ==========================
   // BOTÕES RESPONSIVOS
