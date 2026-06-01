@@ -52,10 +52,10 @@ class ExitButton {
 
     // texto
     fill(255);
+    textFont (buttonFont);
     textAlign(CENTER, CENTER);
     textSize(h * 0.38);
     text(label, 0, 0);
-    textFont (buttonFont);
 
     popMatrix();
 
