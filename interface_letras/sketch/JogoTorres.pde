@@ -26,22 +26,18 @@ class JogoTorres {
     "Ao olhar pelo lado direito da caixa\ntodas as torres têm de ser visíveis."
   };
 
-String getNomeTag(String uid) {
-
-  if (uid.equals("04 6D 2F 9F D9 2A 81")) {
-    return "TORRE GRANDE";
+  String getNomeTag(String uid) {
+    if (uid.equals("04 6D 2F 9F D9 2A 81")) {
+      return "TORRE GRANDE";
+    }
+    if (uid.equals("04 68 DC 9F D9 2A 81")) {
+      return "TORRE MÉDIA";
+    }
+    if (uid.equals("04 C1 3E 9F D9 2A 81")) {
+      return "TORRE PEQUENA";
+    }
+    return uid;
   }
-
-  if (uid.equals("04 68 DC 9F D9 2A 81")) {
-    return "TORRE MÉDIA";
-  }
-
-  if (uid.equals("04 C1 3E 9F D9 2A 81")) {
-    return "TORRE PEQUENA";
-  }
-
-  return uid;
-}
 
   String instrucaoEscolhida;
   String[] resposta;
@@ -63,7 +59,6 @@ String getNomeTag(String uid) {
   }
 
   void setup() {
-
     float exitW = parent.width * 0.08;
     float exitH = parent.height * 0.06;
 
@@ -73,15 +68,14 @@ String getNomeTag(String uid) {
       (int)exitW,
       (int)exitH,
       "MENU",
-      parent.color(255, 90, 90),
-      parent.color(255, 130, 130)
+      color(255, 59, 48),
+      color(255, 120, 120),
+      buttonFont
     );
-
     startNewRound();
   }
 
   void run() {
-
     if (!gameRunning) return;
 
     drawBackground();
@@ -94,30 +88,19 @@ String getNomeTag(String uid) {
   }
 
   void drawBackground() {
-
     for (int i = 0; i < parent.height; i++) {
-
       float inter = map(i, 0, parent.height, 0, 1);
-
-      color c = lerpColor(
-        color(220, 210, 210),
-        color(210, 220, 220),
-        inter
-      );
-
+      color c = lerpColor(color(240, 248, 255), color(240, 248, 255), inter);
       parent.stroke(c);
       parent.line(0, i, parent.width, i);
     }
   }
 
   void drawTitle() {
-
+    parent.textFont (titleFont);
     parent.textAlign(CENTER, CENTER);
-
     parent.textSize(parent.height * 0.06);
-
     parent.fill(0);
-
     parent.text(
       "Jogo das Torres",
       parent.width / 2,
@@ -126,13 +109,10 @@ String getNomeTag(String uid) {
   }
 
   void drawInstruction() {
-
+    parent.textFont (instructionFont);
     parent.fill(0);
-
     parent.textAlign(CENTER);
-
     parent.textSize(parent.height * 0.03);
-
     parent.text(
       "Coloca as torres na ordem correta",
       parent.width / 2,
@@ -141,34 +121,25 @@ String getNomeTag(String uid) {
   }
 
   void drawTowerCard() {
-
+    parent.textFont (cardFont);
     parent.pushMatrix();
-
     parent.translate(
       parent.width / 2,
       parent.height * 0.45
     );
 
     parent.rectMode(CENTER);
-
     parent.noStroke();
-
     parent.fill(0);
-
     parent.textAlign(CENTER, CENTER);
-
     parent.textSize(parent.height * 0.04);
-
     parent.text(
       instrucaoEscolhida,
       0,
       -20
     );
-
     parent.fill(70);
-
     parent.textSize(parent.height * 0.025);
-
     parent.text(
       "Depois pressiona o botão",
       0,
@@ -181,73 +152,54 @@ String getNomeTag(String uid) {
   }
 
   void drawTagInfo() {
-
+    parent.textFont (instructionFont);
     parent.textAlign(CENTER);
-
     parent.textSize(parent.height * 0.02);
-
     parent.fill(40);
 
     String textoTag = "nenhuma";
 
-if (hasLine) {
-  textoTag = getNomeTag(tag);
-}
-
-parent.text(
-  "Última tag: " + textoTag,
-  parent.width / 2,
-  parent.height * 0.82
-);
+  if (hasLine) {
+    textoTag = getNomeTag(tag);
   }
+  parent.text(
+    "Última torre inserida: " + textoTag,
+    parent.width / 2,
+    parent.height * 0.82
+  );
+    }
 
   void handleSerialData(Serial p) {
-
     try {
-
       String line = p.readStringUntil('\n');
-
       if (line != null) {
-
         line = line.trim();
-
         if (line.length() != 0) {
-
           if (line.equals("B")) {
-
             processarResposta();
           }
           else {
-
             currentLine = line;
-
             hasLine = true;
-
             processarTag(currentLine);
           }
         }
       }
     }
     catch(Exception e) {
-
       e.printStackTrace();
     }
   }
 
   void processarTag(String line) {
-
     tag = line.substring(3);
-
     reader = int(line.substring(0, 1));
-
     resposta[reader] = tag;
-
     println("Recebido: \"" + tag);
   }
 
   void processarResposta() {
     boolean correct = true;
-
     for (int i = 0; i < tags[rand].length; i++) {
       for (int c = 0; c < 3; c++) {
         if (!resposta[i].equals(tags[rand][i][c])) {
@@ -256,7 +208,6 @@ parent.text(
         }
       }
     }
-
     if (correct) {
       if (myPort2 != null) {
         myPort2.write("C\n");
@@ -267,14 +218,12 @@ parent.text(
         myPort2.write("E\n");
       }
     }
-
     parent.delay(1000);
 
     startNewRound();
   }
 
   void startNewRound() {
-
     if (resposta == null) {
       resposta = new String[3];
     }
@@ -293,17 +242,13 @@ parent.text(
   }
 
   void mousePressed() {
-
     if (gameExitButton.isOver()) {
-
       gameRunning = false;
 
       try {
-
         parent.getClass()
           .getMethod("returnToMenu")
           .invoke(parent);
-
       } catch (Exception e) {
 
         println("Erro ao regressar ao menu.");
@@ -312,7 +257,6 @@ parent.text(
   }
 
   void stop() {
-
     gameRunning = false;
   }
 }

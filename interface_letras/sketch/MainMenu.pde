@@ -17,6 +17,8 @@ int screenState = 0;
 Serial myPort1, myPort2;
 
 PFont titleFont;
+PFont instructionFont;
+PFont cardFont;
 PFont buttonFont;
 
 void setup() {
@@ -24,61 +26,54 @@ void setup() {
   fullScreen();
   smooth(8);
 
-  titleFont = createFont("MS Sans Serif 1", int(height * 0.07));
+  titleFont = createFont("Fredoka-Medium", int(height * 0.07));
+  instructionFont = createFont("Nunito", int(height * 0.03));
+  cardFont = createFont("Fredoka", int(height * 0.07));
+  buttonFont = createFont("Fredoka-Medium", int(height * 0.07));
 
-  // ==========================
-  // BOTÕES RESPONSIVOS
-  // ==========================
-
-  float btnW = width * 0.45;
-  float btnH = height * 0.10;
-
-  float startY = height * 0.22;
-  float spacing = height * 0.13;
+  float btnW = width * 0.46;
+  float btnH = height * 0.22;
+  
+  float gapX = width * 0.03;
+  float gapY = height * 0.05;
+  
+  float centerX = width / 2;
+  float centerY = height * 0.50;
+  
+  float startX = centerX - btnW - gapX/2;
+  float startY = centerY - btnH -gapY/2;
 
   letrasButton = new MenuButton(
-    width/2 - btnW/2,
-    startY,
-    btnW,
-    btnH,
+    startX, startY, btnW, btnH,
     "Jogo das Letras",
-    color(255, 140, 70),
-    color(255, 180, 100)
+    color(76, 201, 240),
+    color(120, 220, 250),
+    titleFont
     );
 
   matButton = new MenuButton(
-    width/2 - btnW/2,
-    startY + spacing,
-    btnW,
-    btnH,
+    startX + btnW + gapX, startY, btnW, btnH,
     "Jogo da Matemática",
-    color(70, 170, 255),
-    color(120, 210, 255)
+    color(255, 209, 102),
+    color(255, 225, 152),
+    titleFont
     );
 
   coresButton = new MenuButton(
-    width/2 - btnW/2,
-    startY + spacing * 2,
-    btnW,
-    btnH,
+    startX, startY + btnH + gapY, btnW, btnH,
     "Jogo das Cores",
-    color(255, 90, 170),
-    color(255, 140, 200)
+    color(255, 65, 107),
+    color(255, 120, 150),
+    titleFont
     );
 
   torresButton = new MenuButton(
-    width/2 - btnW/2,
-    startY + spacing * 3,
-    btnW,
-    btnH,
+    startX + btnW + gapX, startY + btnH + gapY, btnW, btnH,
     "Jogo das Torres",
-    color(150, 100, 255),
-    color(190, 150, 255)
+    color(98, 199, 89),
+    color(140, 220, 130),
+    titleFont
     );
-
-  // ==========================
-  // BOTÃO SAIR RESPONSIVO
-  // ==========================
 
   float exitW = width * 0.08;
   float exitH = height * 0.06;
@@ -86,21 +81,16 @@ void setup() {
   exitButton = new ExitButton(
     width - exitW - width * 0.02,
     height - exitH - height * 0.02,
-    exitW,
-    exitH,
+    exitW, exitH,
     "Sair",
-    color(255, 80, 80),
-    color(255, 120, 120)
+    color(255, 0, 0),
+    color(255, 10, 10),
+    buttonFont
     );
-
-  // ==========================
-  // PORTAS SÉRIE
-  // ==========================
 
   printArray(Serial.list());
 
   if (Serial.list().length > 4) {
-
     String portName1 = Serial.list()[4];
     myPort1 = new Serial(this, portName1, 9600);
     myPort1.bufferUntil('\n');
@@ -131,43 +121,30 @@ void draw() {
     torresButton.display();
     exitButton.display();
   }
-
   else if (screenState == 1 && jogoLetras != null) {
     jogoLetras.run();
   }
-
   else if (screenState == 1 && jogoMatematica != null) {
     jogoMatematica.run();
   }
-
   else if (screenState == 1 && jogoCores != null) {
     jogoCores.run();
   }
-
   else if (screenState == 1 && jogoTorres != null) {
     jogoTorres.run();
   }
 }
 
 void drawBackground() {
-
   for (int i = 0; i < height; i++) {
-
     float inter = map(i, 0, height, 0, 1);
-
-    color c = lerpColor(
-      color(220, 210, 210),
-      color(210, 220, 220),
-      inter
-      );
-
+    color c = lerpColor(color(240, 248, 255), color(240, 248, 255), inter);
     stroke(c);
     line(0, i, width, i);
   }
 }
 
 void drawTitle() {
-
   textAlign(CENTER, CENTER);
   textFont(titleFont);
 
@@ -175,50 +152,39 @@ void drawTitle() {
 
   text(
     "Jogos Educativos",
-    width / 2,
-    height * 0.10
+    width / 2, height * 0.10
     );
 }
 
 void serialEvent(Serial p) {
-
   if (screenState == 1 && jogoLetras != null) {
     jogoLetras.handleSerialData(p);
   }
-
   else if (screenState == 1 && jogoMatematica != null) {
     jogoMatematica.handleSerialData(p);
   }
-
   else if (screenState == 1 && jogoCores != null) {
     jogoCores.handleSerialData(p);
   }
-
   else if (screenState == 1 && jogoTorres != null) {
     jogoTorres.handleSerialData(p);
   }
 }
 
 void mousePressed() {
-
   if (screenState == 0) {
-
     if (letrasButton.isOver()) {
       startLetrasGame();
     }
-
     if (matButton.isOver()) {
       startMatematicaGame();
     }
-
     if (coresButton.isOver()) {
       startCoresGame();
     }
-
     if (torresButton.isOver()) {
       startTorresGame();
     }
-
     if (exitButton.isOver()) {
       exit();
     }
@@ -242,50 +208,42 @@ void mousePressed() {
 }
 
 void startLetrasGame() {
-
   jogoLetras = new JogoLetras(this, myPort1, myPort2);
   jogoLetras.setup();
   screenState = 1;
 }
 
 void startMatematicaGame() {
-
   jogoMatematica = new JogoMatematica(this, myPort1, myPort2);
   jogoMatematica.setup();
   screenState = 1;
 }
 
 void startCoresGame() {
-
   jogoCores = new JogoCores(this, myPort1, myPort2);
   jogoCores.setup();
   screenState = 1;
 }
 
 void startTorresGame() {
-
   jogoTorres = new JogoTorres(this, myPort1, myPort2);
   jogoTorres.setup();
   screenState = 1;
 }
 
 void returnToMenu() {
-
   if (jogoLetras != null) {
     jogoLetras.stop();
     jogoLetras = null;
   }
-
   if (jogoMatematica != null) {
     jogoMatematica.stop();
     jogoMatematica = null;
   }
-
   if (jogoCores != null) {
     jogoCores.stop();
     jogoCores = null;
   }
-
   if (jogoTorres != null) {
     jogoTorres.stop();
     jogoTorres = null;
