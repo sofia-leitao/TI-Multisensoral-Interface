@@ -106,7 +106,7 @@ class JogoMatematica {
   parent.text(
     "Jogo da Matemática",
     parent.width / 2,
-    parent.height * 0.08
+    parent.height * 0.14
   );
 }
 
@@ -118,7 +118,7 @@ class JogoMatematica {
   parent.text(
     "Resolve a conta usando as peças disponíveis.\nQuando as peças estiverem todas colocadas na plataforma, carrega no botão para verificar a tua resposta.\nSe o resultado tiver menos de 3 algarismos, preenche os espaços à esquerda com 0.",
     parent.width / 2,
-    parent.height * 0.18
+    parent.height * 0.28
   );
 }
 
@@ -138,7 +138,7 @@ class JogoMatematica {
   parent.textAlign(CENTER, CENTER);
   parent.textSize(parent.height * 0.10);
   parent.fill(0);
-  parent.text(num1 + " " + operacao + " " + num2 + " = ?", parent.width / 2, parent.height * 0.45);
+  parent.text(num1 + " " + operacao + " " + num2 + " = ?", parent.width / 2, parent.height * 0.50);
 }
 
   void drawResposta() {
@@ -151,7 +151,7 @@ class JogoMatematica {
     parent.text(
       "Resposta: " + respostaAtual,
       parent.width / 2,
-      parent.height * 0.70
+      parent.height * 0.98
     );
   }
 }

@@ -104,7 +104,7 @@ class JogoTorres {
     parent.text(
       "Jogo das Torres",
       parent.width / 2,
-      parent.height * 0.08
+      parent.height * 0.14
     );
   }
 
@@ -116,7 +116,14 @@ class JogoTorres {
     parent.text(
       "Coloca as torres na ordem correta",
       parent.width / 2,
-      parent.height * 0.16
+      parent.height * 0.28
+    );
+    parent.fill(70);
+    parent.textSize(parent.height * 0.025);
+    parent.text(
+      "Depois pressiona o botão",
+      parent.width / 2,
+      parent.height * 0.32
     );
   }
 
@@ -125,7 +132,7 @@ class JogoTorres {
     parent.pushMatrix();
     parent.translate(
       parent.width / 2,
-      parent.height * 0.45
+      parent.height * 0.52
     );
 
     parent.rectMode(CENTER);
@@ -137,13 +144,6 @@ class JogoTorres {
       instrucaoEscolhida,
       0,
       -20
-    );
-    parent.fill(70);
-    parent.textSize(parent.height * 0.025);
-    parent.text(
-      "Depois pressiona o botão",
-      0,
-      parent.height * 0.10
     );
 
     parent.popMatrix();

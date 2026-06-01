@@ -131,7 +131,7 @@ String getNomeTag(String uid) {
   parent.text(
     "Jogo das Letras",
     parent.width / 2,
-    parent.height * 0.08
+    parent.height * 0.14
   );
 }
 
@@ -140,7 +140,7 @@ String getNomeTag(String uid) {
     parent.pushMatrix();
     parent.translate(
       parent.width / 2,
-      parent.height * 0.40
+      parent.height * 0.52
     );
   
     parent.textAlign(CENTER, CENTER);
@@ -159,13 +159,13 @@ String getNomeTag(String uid) {
     parent.text(
       "Coloca a letra correta no sensor",
       parent.width / 2,
-      parent.height * 0.65
+      parent.height * 0.28
     );
     parent.textSize(parent.height * 0.022);
     parent.text(
       "Carrega no botão para ouvir o som novamente",
       parent.width / 2,
-      parent.height * 0.71
+      parent.height * 0.32
     );
   }
 

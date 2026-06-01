@@ -113,7 +113,7 @@ class JogoCores {
     parent.text(
       "Jogo das Cores",
       parent.width/2,
-      parent.height * 0.08
+      parent.height * 0.14
       );
   }
 
@@ -125,7 +125,7 @@ class JogoCores {
     parent.text(
       "Coloca o objeto da cor correta no sensor",
       parent.width/2,
-      parent.height * 0.16
+      parent.height * 0.28
       );
   }
 
@@ -138,7 +138,7 @@ class JogoCores {
 
     parent.translate(
       parent.width/2,
-      parent.height * 0.42
+      parent.height * 0.52
       );
 
     parent.rectMode(CENTER);
@@ -167,7 +167,7 @@ class JogoCores {
     parent.text(
       colorNames[chosenColor],
       parent.width/2,
-      parent.height * 0.68
+      parent.height * 0.78
       );
   }
 
