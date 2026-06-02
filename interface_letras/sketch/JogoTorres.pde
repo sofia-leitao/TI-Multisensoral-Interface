@@ -195,8 +195,8 @@ class JogoTorres {
         if (!resposta[c].equals(tags[rand][i][c])) {
           correct = false;
         }
-        if (correct) break;
       }
+      if (correct) break;
     }
     if (correct) {
       if (myPort2 != null) {
