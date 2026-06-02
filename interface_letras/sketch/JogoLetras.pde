@@ -151,9 +151,9 @@ class JogoLetras {
     parent.textAlign(CENTER);
     parent.fill(0);
     parent.textSize(parent.height * 0.03);
-    parent.text("Coloca a letra correta no sensor", parent.width / 2, parent.height * 0.5);
+    parent.text("Coloca a letra correta no sensor", parent.width / 2, parent.height * 0.28);
     parent.textSize(parent.height * 0.022);
-    parent.text("Carrega no botão para ouvir o som novamente", parent.width / 2, parent.height * 0.55);
+    parent.text("Carrega no botão para ouvir o som novamente", parent.width / 2, parent.height * 0.32);
   }
 
 
