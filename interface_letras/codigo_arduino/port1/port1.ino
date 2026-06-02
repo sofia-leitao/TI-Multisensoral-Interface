@@ -40,6 +40,7 @@ void loop() {
       Serial.print(String(readerIndex + 1) + "-"); 
       
       MFRC522Debug::PrintUID(Serial, reader.uid);
+      Serial.println();
       
       //MFRC522::PICC_Type piccType = reader.PICC_GetType(reader.uid.sak);
       //Serial.println(MFRC522Debug::PICC_GetTypeName(piccType));
