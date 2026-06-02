@@ -43,53 +43,17 @@ void setup() {
   float startX = centerX - btnW - gapX/2;
   float startY = centerY - btnH -gapY/2;
 
-  letrasButton = new MenuButton(
-    startX, startY, btnW, btnH,
-    "Jogo das Letras",
-    color(76, 201, 240),
-    color(120, 220, 250),
-    titleFont
-    );
-
-  matButton = new MenuButton(
-    startX + btnW + gapX, startY, btnW, btnH,
-    "Jogo da Matemática",
-    color(255, 209, 102),
-    color(255, 225, 152),
-    titleFont
-    );
-
-  coresButton = new MenuButton(
-    startX, startY + btnH + gapY, btnW, btnH,
-    "Jogo das Cores",
-    color(255, 65, 107),
-    color(255, 120, 150),
-    titleFont
-    );
-
-  torresButton = new MenuButton(
-    startX + btnW + gapX, startY + btnH + gapY, btnW, btnH,
-    "Jogo das Torres",
-    color(98, 199, 89),
-    color(140, 220, 130),
-    titleFont
-    );
+  letrasButton = new MenuButton(startX, startY, btnW, btnH, "Jogo das Letras", color(76, 201, 240), color(120, 220, 250), titleFont);
+  matButton = new MenuButton(startX + btnW + gapX, startY, btnW, btnH, "Jogo da Matemática", color(255, 209, 102), color(255, 225, 152), titleFont);
+  coresButton = new MenuButton(startX, startY + btnH + gapY, btnW, btnH, "Jogo das Cores", color(255, 65, 107), color(255, 120, 150), titleFont);
+  torresButton = new MenuButton(startX + btnW + gapX, startY + btnH + gapY, btnW, btnH, "Jogo das Torres", color(98, 199, 89), color(140, 220, 130), titleFont);
 
   float exitW = width * 0.08;
   float exitH = height * 0.06;
 
-  exitButton = new ExitButton(
-    width - exitW - width * 0.02,
-    height - exitH - height * 0.02,
-    exitW, exitH,
-    "Sair",
-    color(255, 0, 0),
-    color(255, 10, 10),
-    buttonFont
-    );
+  exitButton = new ExitButton(width - exitW - width * 0.02, height - exitH - height * 0.02, exitW, exitH, "Sair", color(255, 0, 0), color(255, 10, 10), buttonFont);
 
   printArray(Serial.list());
-
   if (Serial.list().length > 4) {
     String portName1 = Serial.list()[4];
     myPort1 = new Serial(this, portName1, 115200);
@@ -108,8 +72,8 @@ void setup() {
   jogoTorres = null;
 }
 
-void draw() {
 
+void draw() {
   if (screenState == 0) {
 
     drawBackground();
@@ -120,20 +84,21 @@ void draw() {
     coresButton.display();
     torresButton.display();
     exitButton.display();
-  }
+  } 
   else if (screenState == 1 && jogoLetras != null) {
     jogoLetras.run();
-  }
+  } 
   else if (screenState == 1 && jogoMatematica != null) {
     jogoMatematica.run();
-  }
+  } 
   else if (screenState == 1 && jogoCores != null) {
     jogoCores.run();
-  }
+  } 
   else if (screenState == 1 && jogoTorres != null) {
     jogoTorres.run();
   }
 }
+
 
 void drawBackground() {
   for (int i = 0; i < height; i++) {
@@ -144,17 +109,16 @@ void drawBackground() {
   }
 }
 
+
 void drawTitle() {
   textAlign(CENTER, CENTER);
   textFont(titleFont);
 
   fill(0);
 
-  text(
-    "Jogos Educativos",
-    width / 2, height * 0.10
-    );
+  text("Jogos Educativos", width / 2, height * 0.10);
 }
+
 
 void serialEvent(Serial p) {
   if (screenState == 1 && jogoLetras != null) {
@@ -170,6 +134,7 @@ void serialEvent(Serial p) {
     jogoTorres.handleSerialData(p);
   }
 }
+
 
 void mousePressed() {
   if (screenState == 0) {
@@ -189,23 +154,20 @@ void mousePressed() {
       exit();
     }
   }
-
   else if (screenState == 1 && jogoLetras != null) {
     jogoLetras.mousePressed();
   }
-
   else if (screenState == 1 && jogoMatematica != null) {
     jogoMatematica.mousePressed();
   }
-
   else if (screenState == 1 && jogoCores != null) {
     jogoCores.mousePressed();
   }
-
   else if (screenState == 1 && jogoTorres != null) {
     jogoTorres.mousePressed();
   }
 }
+
 
 void startLetrasGame() {
   jogoLetras = new JogoLetras(this, myPort1, myPort2);
@@ -213,11 +175,13 @@ void startLetrasGame() {
   screenState = 1;
 }
 
+
 void startMatematicaGame() {
   jogoMatematica = new JogoMatematica(this, myPort1, myPort2);
   jogoMatematica.setup();
   screenState = 1;
 }
+
 
 void startCoresGame() {
   jogoCores = new JogoCores(this, myPort1, myPort2);
@@ -225,11 +189,13 @@ void startCoresGame() {
   screenState = 1;
 }
 
+
 void startTorresGame() {
   jogoTorres = new JogoTorres(this, myPort1, myPort2);
   jogoTorres.setup();
   screenState = 1;
 }
+
 
 void returnToMenu() {
   if (jogoLetras != null) {
@@ -248,6 +214,5 @@ void returnToMenu() {
     jogoTorres.stop();
     jogoTorres = null;
   }
-
   screenState = 0;
 }

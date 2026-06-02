@@ -26,19 +26,6 @@ class JogoTorres {
     "Ao olhar pelo lado direito da caixa\ntodas as torres têm de ser visíveis."
   };
 
-  String getNomeTag(String uid) {
-    if (uid.equals("04 6D 2F 9F D9 2A 81")) {
-      return "TORRE GRANDE";
-    }
-    if (uid.equals("04 68 DC 9F D9 2A 81")) {
-      return "TORRE MÉDIA";
-    }
-    if (uid.equals("04 C1 3E 9F D9 2A 81")) {
-      return "TORRE PEQUENA";
-    }
-    return uid;
-  }
-
   String instrucaoEscolhida;
   String[] resposta;
 
@@ -74,6 +61,21 @@ class JogoTorres {
     );
     startNewRound();
   }
+  
+  
+  String getNomeTag(String uid) {
+    if (uid.equals("04 6D 2F 9F D9 2A 81")) {
+      return "TORRE GRANDE";
+    }
+    if (uid.equals("04 68 DC 9F D9 2A 81")) {
+      return "TORRE MÉDIA";
+    }
+    if (uid.equals("04 C1 3E 9F D9 2A 81")) {
+      return "TORRE PEQUENA";
+    }
+    return uid;
+  }
+
 
   void run() {
     if (!gameRunning) return;
@@ -87,6 +89,7 @@ class JogoTorres {
     gameExitButton.display();
   }
 
+
   void drawBackground() {
     for (int i = 0; i < parent.height; i++) {
       float inter = map(i, 0, parent.height, 0, 1);
@@ -95,6 +98,7 @@ class JogoTorres {
       parent.line(0, i, parent.width, i);
     }
   }
+
 
   void drawTitle() {
     parent.textFont (titleFont);
@@ -107,6 +111,7 @@ class JogoTorres {
       parent.height * 0.14
     );
   }
+
 
   void drawInstruction() {
     parent.textFont (instructionFont);
@@ -127,6 +132,7 @@ class JogoTorres {
     );
   }
 
+
   void drawTowerCard() {
     parent.textFont (cardFont);
     parent.pushMatrix();
@@ -140,34 +146,30 @@ class JogoTorres {
     parent.fill(0);
     parent.textAlign(CENTER, CENTER);
     parent.textSize(parent.height * 0.04);
-    parent.text(
-      instrucaoEscolhida,
-      0,
-      -20
-    );
-
+    parent.text(instrucaoEscolhida, 0, -20);
     parent.popMatrix();
-
     parent.rectMode(CORNER);
   }
+
 
   void drawTagInfo() {
     parent.textFont (instructionFont);
     parent.textAlign(CENTER);
     parent.textSize(parent.height * 0.02);
     parent.fill(40);
-
     String textoTag = "nenhuma";
 
-  if (hasLine) {
-    textoTag = getNomeTag(tag);
-  }
-  parent.text(
-    "Última torre inserida: " + textoTag,
-    parent.width / 2,
-    parent.height * 0.82
-  );
+    if (hasLine) {
+      textoTag = getNomeTag(tag);
     }
+    
+    parent.text(
+      "Última torre inserida: " + textoTag,
+      parent.width / 2,
+      parent.height * 0.82
+    );
+  }
+
 
   void handleSerialData(Serial p) {
     try {
@@ -191,12 +193,14 @@ class JogoTorres {
     }
   }
 
+
   void processarTag(String line) {
     tag = line.substring(3);
     reader = int(line.substring(0, 1));
     resposta[reader] = tag;
     println("Recebido: " + tag);
   }
+
 
   void processarResposta() {
     boolean correct = true;
@@ -222,6 +226,7 @@ class JogoTorres {
     parent.delay(1000);
   }
 
+
   void startNewRound() {
     if (resposta == null) {
       resposta = new String[3];
@@ -240,20 +245,20 @@ class JogoTorres {
     hasLine = false;
   }
 
+
   void mousePressed() {
     if (gameExitButton.isOver()) {
       gameRunning = false;
-
       try {
         parent.getClass()
           .getMethod("returnToMenu")
           .invoke(parent);
       } catch (Exception e) {
-
         println("Erro ao regressar ao menu.");
       }
     }
   }
+
 
   void stop() {
     gameRunning = false;

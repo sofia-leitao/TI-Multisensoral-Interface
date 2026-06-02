@@ -65,15 +65,7 @@ class JogoLetras {
     "../Letras/Z.mp3"
   };
 
-String getNomeTag(String uid) {
-  for (int i = 0; i < tags.length; i++) 
-  {
-    if (uid.equals(tags[i])) {
-      return pieceNames[i];
-    }
-  }
-  return uid;
-}
+
 
   int chosenTag;
   ExitButton gameExitButton;
@@ -84,9 +76,19 @@ String getNomeTag(String uid) {
     this.myPort1 = myPort1;
     this.myPort2 = myPort2;
   }
+  
+  
+  String getNomeTag(String uid) {
+    for (int i = 0; i < tags.length; i++) {
+      if (uid.equals(tags[i])) {
+        return pieceNames[i];
+      }
+    }
+    return uid;
+  }
+
 
   void setup() {
-
   float exitW = parent.width * 0.08;
   float exitH = parent.height * 0.06;
 
@@ -102,7 +104,8 @@ String getNomeTag(String uid) {
   );
 
   startNewRound();
-}
+  }
+
 
   void run() {
     if (!gameRunning) return;
@@ -114,6 +117,7 @@ String getNomeTag(String uid) {
     gameExitButton.display();
   }
 
+
   void drawBackground() {
     for (int i = 0; i < parent.height; i++) {
       float inter = map(i, 0, parent.height, 0, 1);
@@ -123,25 +127,23 @@ String getNomeTag(String uid) {
     }
   }
 
+
   void drawTitle() {
     parent.textFont (titleFont);
-  parent.textAlign(CENTER, CENTER);
-  parent.textSize(parent.height * 0.06);
-  parent.fill(0);
-  parent.text(
+    parent.textAlign(CENTER, CENTER);
+    parent.textSize(parent.height * 0.06);
+    parent.fill(0);
+    parent.text(
     "Jogo das Letras",
     parent.width / 2,
-    parent.height * 0.14
-  );
-}
+    parent.height * 0.14);
+  }
+
 
   void drawLetterCard() {
     parent.textFont (cardFont);
     parent.pushMatrix();
-    parent.translate(
-      parent.width / 2,
-      parent.height * 0.52
-    );
+    parent.translate(parent.width / 2, parent.height * 0.52);
   
     parent.textAlign(CENTER, CENTER);
     parent.fill(0);
@@ -151,23 +153,17 @@ String getNomeTag(String uid) {
     parent.popMatrix();
   }
 
+
   void drawInstructions() {
     parent.textFont (instructionFont);
     parent.textAlign(CENTER);
     parent.fill(0);
     parent.textSize(parent.height * 0.03);
-    parent.text(
-      "Coloca a letra correta no sensor",
-      parent.width / 2,
-      parent.height * 0.28
-    );
+    parent.text("Coloca a letra correta no sensor", parent.width / 2, parent.height * 0.28);
     parent.textSize(parent.height * 0.022);
-    parent.text(
-      "Carrega no botão para ouvir o som novamente",
-      parent.width / 2,
-      parent.height * 0.32
-    );
+    parent.text("Carrega no botão para ouvir o som novamente", parent.width / 2, parent.height * 0.32);
   }
+
 
   void drawLastTag() {
     parent.textFont (instructionFont);
@@ -179,12 +175,9 @@ String getNomeTag(String uid) {
     if (hasLine) {
       textoTag = getNomeTag(currentLine);
     }
-    parent.text(
-      "Última tag: " + textoTag,
-      parent.width * 0.02,
-      parent.height * 0.95
-    );
+    parent.text("Última tag: " + textoTag, parent.width * 0.02, parent.height * 0.95);
   }
+
 
   void handleSerialData(Serial p) {
     try {
@@ -203,14 +196,14 @@ String getNomeTag(String uid) {
           currentLine = line.substring(3);
           hasLine = true;
         }
-        println("Recebido: \"" + currentLine);
+        println("Recebido: " + currentLine);
       }
       if (hasLine) {
         if (currentLine.equals(tags[chosenTag])) {
-          parent.delay(1000);
           if (myPort2 != null) {
             myPort2.write("C\n");
           }
+          parent.delay(1000);
           startNewRound();
         }
         else {
@@ -229,6 +222,7 @@ String getNomeTag(String uid) {
     }
   }
 
+
   void startNewRound() {
     chosenTag = int(parent.random(tags.length));
     hasLine = false;
@@ -239,6 +233,7 @@ String getNomeTag(String uid) {
     }
   }
 
+
   void mousePressed() {
     if (gameExitButton.isOver()) {
       gameRunning = false;
@@ -246,6 +241,7 @@ String getNomeTag(String uid) {
       mainMenu.returnToMenu();
     }
   }
+
 
   void stop() {
     if (file != null) {

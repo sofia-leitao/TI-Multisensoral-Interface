@@ -9,11 +9,7 @@ class ExitButton {
 
   PFont font;
 
-  ExitButton(
-    float x, float y, float w, float h,
-    String label,
-    color normalColor, color hoverColor, PFont font) 
-  {
+  ExitButton(float x, float y, float w, float h, String label, color normalColor, color hoverColor, PFont font) {
     this.x = x;
     this.y = y;
     this.w = w;
@@ -25,10 +21,10 @@ class ExitButton {
     this.font = font;
   }
 
+
   void display() {
     update();
-   
-
+ 
     float radius = h * 0.35;
     pushMatrix();
     translate(x + w/2, y + h/2);
@@ -63,6 +59,7 @@ class ExitButton {
     textAlign(LEFT, BASELINE);
   }
 
+
   void update() {
     over =
       mouseX >= x &&
@@ -70,6 +67,7 @@ class ExitButton {
       mouseY >= y &&
       mouseY <= y + h;
   }
+
 
   boolean isOver() {
     return over;

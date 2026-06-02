@@ -7,14 +7,7 @@ class MenuButton {
   color textColor = color(255);
   boolean over;
 
-  MenuButton(
-    float x, float y, 
-    float w, float h,
-    String label,
-    color normalColor,
-    color hoverColor, 
-    PFont font
-    ){
+  MenuButton(float x, float y, float w, float h, String label, color normalColor, color hoverColor, PFont font){
       this.x = x;
       this.y = y;
       this.w = w;
@@ -25,15 +18,13 @@ class MenuButton {
       this.font = font;
     }
 
+
   void display() {
     update();
-
     float radius = h * 0.30;
 
     pushMatrix();
-
     translate(x + w/2, y + h/2);
-
     rectMode(CENTER);
     noStroke();
 
@@ -50,13 +41,7 @@ class MenuButton {
 
     // brilho
     fill(255, 12);
-    rect(
-      0,
-      -h * 0.25,
-      w * 0.90,
-      h * 0.35,
-      radius * 0.7
-    );
+    rect(0, -h * 0.25, w * 0.90, h * 0.35, radius * 0.7);
 
     // texto
     fill(textColor);
@@ -65,11 +50,11 @@ class MenuButton {
     text(label, 0, 0);
 
     popMatrix();
-
     rectMode(CORNER);
     textAlign(LEFT, BASELINE);
     
   }
+
 
   void update() {
     over =
@@ -78,6 +63,7 @@ class MenuButton {
       mouseY >= y &&
       mouseY <= y + h;
   }
+
 
   boolean isOver() {
     return over;

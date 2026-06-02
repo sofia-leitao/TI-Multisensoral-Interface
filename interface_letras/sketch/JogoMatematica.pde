@@ -35,21 +35,10 @@ class JogoMatematica {
     "04 68 2F 9F D9 2A 81"
   };
 
-  String getNomeTag(String uid) {
-    for (int i = 0; i < 10; i++) {
-      if (uid.equals(numberTags1[i]) ||
-          uid.equals(numberTags2[i])) {
-        return str(i);
-      }
-    }
-    return uid;
-  }
-
   int num1, num2, resultado, reader;
   int respostaAtual = -1;
   String operacao, tag; 
   String[] resposta;
-
 
   JogoMatematica(PApplet parent, Serial myPort1, Serial myPort2) {
     this.parent = parent;
@@ -60,7 +49,6 @@ class JogoMatematica {
 
 
   void setup() {
-
   float exitW = parent.width * 0.08;
   float exitH = parent.height * 0.06;
 
@@ -77,6 +65,18 @@ class JogoMatematica {
   novaConta();
 }
 
+
+  String getNomeTag(String uid) {
+    for (int i = 0; i < 10; i++) {
+      if (uid.equals(numberTags1[i]) ||
+          uid.equals(numberTags2[i])) {
+        return str(i);
+      }
+    }
+    return uid;
+  }
+
+
   void run() {
     if (!gameRunning) return;
     drawBackground();
@@ -89,6 +89,7 @@ class JogoMatematica {
     gameExitButton.display();
   }
 
+
   void drawBackground() {
     for (int i = 0; i < parent.height; i++) {
       float inter = map(i, 0, parent.height, 0, 1);
@@ -98,29 +99,31 @@ class JogoMatematica {
     }
   }
 
+
   void drawTitle() {
     parent.textFont (titleFont);
-  parent.textAlign(CENTER, CENTER);
-  parent.textSize(parent.height * 0.06);
-  parent.fill(0);
-  parent.text(
-    "Jogo da Matemática",
-    parent.width / 2,
-    parent.height * 0.14
-  );
-}
+    parent.textAlign(CENTER, CENTER);
+    parent.textSize(parent.height * 0.06);
+    parent.fill(0);
+    parent.text(
+      "Jogo da Matemática",
+      parent.width / 2,
+      parent.height * 0.14
+    );
+  }
+
 
   void drawInstruction() {
     parent.textFont (instructionFont);
-  parent.fill(0);
-  parent.textAlign(CENTER);
-  parent.textSize(parent.height * 0.025);
-  parent.text(
-    "Resolve a conta usando as peças disponíveis.\nQuando as peças estiverem todas colocadas na plataforma, carrega no botão para verificar a tua resposta.\nSe o resultado tiver menos de 3 algarismos, preenche os espaços à esquerda com 0.",
-    parent.width / 2,
-    parent.height * 0.28
-  );
-}
+    parent.fill(0);
+    parent.textAlign(CENTER);
+    parent.textSize(parent.height * 0.025);
+    parent.text(
+      "Resolve a conta usando as peças disponíveis.\nQuando as peças estiverem todas colocadas na plataforma, carrega no botão para verificar a tua resposta.\nSe o resultado tiver menos de 3 algarismos, preenche os espaços à esquerda com 0.",
+      parent.width / 2,
+      parent.height * 0.28
+    );
+  }
 
   void drawMathCard() {
     parent.textFont (cardFont);
@@ -134,44 +137,47 @@ class JogoMatematica {
 
 
   void drawConta() {
-  parent.textFont (instructionFont);
-  parent.textAlign(CENTER, CENTER);
-  parent.textSize(parent.height * 0.10);
-  parent.fill(0);
-  parent.text(num1 + " " + operacao + " " + num2 + " = ?", parent.width / 2, parent.height * 0.50);
-}
+    parent.textFont (instructionFont);
+    parent.textAlign(CENTER, CENTER);
+    parent.textSize(parent.height * 0.10);
+    parent.fill(0);
+    parent.text(num1 + " " + operacao + " " + num2 + " = ?", parent.width / 2, parent.height * 0.50);
+  }
 
   void drawResposta() {
-  parent.textFont (instructionFont);
-  parent.textAlign(CENTER);
-  parent.textSize(parent.height * 0.04);
-  parent.fill(40);
-
-  if (respostaAtual != -1) {
-    parent.text(
-      "Resposta: " + respostaAtual,
-      parent.width / 2,
-      parent.height * 0.98
-    );
+    parent.textFont (instructionFont);
+    parent.textAlign(CENTER);
+    parent.textSize(parent.height * 0.04);
+    parent.fill(40);
+  
+    if (respostaAtual != -1) {
+      parent.text(
+        "Resposta: " + respostaAtual,
+        parent.width / 2,
+        parent.height * 0.98
+      );
+    }
   }
-}
 
   void drawTagInfo() {
-  parent.textFont (instructionFont);
-  parent.textAlign(CENTER);
-  parent.textSize(parent.height * 0.02);
-  parent.fill(40);
-  String textoTag = "nenhuma";
+    parent.textFont (instructionFont);
+    parent.textAlign(CENTER);
+    parent.textSize(parent.height * 0.02);
+    parent.fill(40);
+    String textToTag;
+  
+    if (hasLine) {
+      textToTag = getNomeTag(currentLine);
+    } else {
+      textToTag = "nenhuma";
+    }
+    parent.text(
+      "Última peça lida: " + textToTag,
+      parent.width / 2,
+      parent.height * 0.80
+    );
+  }
 
-  if (hasLine) {
-    textoTag = getNomeTag(currentLine);
-  }
-  parent.text(
-    "Última peça lida: " + textoTag,
-    parent.width / 2,
-    parent.height * 0.80
-  );
-  }
 
   void handleSerialData(Serial p) {
     try {
@@ -190,12 +196,15 @@ class JogoMatematica {
     }
   }
   
+  
   void processarTag(String line) {
     tag = line.substring(3);
+    currentLine = tag;
     reader = int(line.substring(0,1));
     resposta[reader] = tag;
-    println("Recebido: \"" + tag);
+    println("Recebido: " + tag);
   }
+
 
   void verificarResposta() {
     println("resultado: " + str(resultado));
@@ -246,6 +255,7 @@ class JogoMatematica {
     hasLine = false;
   }
 
+
   void novaConta() {
     if (resposta == null) {
       resposta = new String[3];
@@ -259,30 +269,32 @@ class JogoMatematica {
     // soma
     if (tipo == 0) {
       do {
-  num1 = int(parent.random(1, 50));
-  num2 = int(parent.random(1, 50));
-  resultado = num1 + num2;
-  }
-  while (resultado > 999);
-        operacao = "+";
-      }
-  
-      // subtração
-      else {
-        num1 = int(parent.random(1, 100));
-        num2 = int(parent.random(1, 100));
-        if (num2 > num1) {
-          int temp = num1;
-          num1 = num2;
-          num2 = temp;
-        }
-        resultado = num1 - num2;
-        operacao = "-";
-      }
+        num1 = int(parent.random(1, 50));
+        num2 = int(parent.random(1, 50));
+        resultado = num1 + num2;
+      } while (resultado > 999);
+    
+      operacao = "+";
     }
+    // subtração
+    else {
+      num1 = int(parent.random(1, 100));
+      num2 = int(parent.random(1, 100));
+      if (num2 > num1) {
+        int temp = num1;
+        num1 = num2;
+        num2 = temp;
+      }
+      resultado = num1 - num2;
+      operacao = "-";
+    }
+  }
+    
+    
   int countDigits(int number) {
     return str(abs(number)).length();
   }
+
 
   void mousePressed() {
     if (gameExitButton.isOver()) {
@@ -291,6 +303,7 @@ class JogoMatematica {
       mainMenu.returnToMenu();
     }
   }
+  
   
   void stop() {
     gameRunning = false;
