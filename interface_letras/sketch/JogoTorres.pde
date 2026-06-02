@@ -191,7 +191,7 @@ class JogoTorres {
     for (int i = 0; i < tags[rand].length; i++) {
       correct = true;
       for (int c = 0; c < 3; c++) {
-        println(resposta[c] + " - " + tags[rand][i][c]);
+        println(i + ": " + resposta[c] + " - " + tags[rand][i][c]);
         if (!resposta[c].equals(tags[rand][i][c])) {
           correct = false;
         }
