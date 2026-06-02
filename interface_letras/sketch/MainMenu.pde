@@ -92,7 +92,7 @@ void setup() {
 
   if (Serial.list().length > 4) {
     String portName1 = Serial.list()[4];
-    myPort1 = new Serial(this, portName1, 9600);
+    myPort1 = new Serial(this, portName1, 115200);
     myPort1.bufferUntil('\n');
     myPort1.clear();
 
