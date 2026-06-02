@@ -7,6 +7,11 @@ class JogoLetras {
   String currentLine = "";
   boolean hasLine = false;
   SoundFile file;
+  String lastTag = "";
+  boolean showLastTag = false;
+  int lastTagTime = 0;
+  int displayTime = 3000;
+  boolean waitingNextRound = false;
 
   String[] pieceNames = {
     "A","B","C","D","E","F","G","H","I","J","L","M",
@@ -111,10 +116,16 @@ class JogoLetras {
     if (!gameRunning) return;
     drawBackground();
     drawTitle();
-    drawLetterCard();
     drawInstructions();
     drawLastTag();
     gameExitButton.display();
+    if (showLastTag && millis() - lastTagTime > displayTime) {
+      showLastTag = false;
+      if (waitingNextRound) {
+        waitingNextRound = false;
+        startNewRound();
+      }
+    }
   }
 
 
@@ -165,21 +176,25 @@ class JogoLetras {
   }
 
 
-  void drawLastTag() { //meter no lugar do que se tira - aparecer durante uns segundos antes de passar ao seguinte
-    parent.textFont (instructionFont);
-    parent.textAlign(LEFT);
-    parent.fill(40);
-    parent.textSize(parent.height * 0.02);
+  void drawLastTag() { 
+  if (!showLastTag) return;
   
-    String textoTag = "nenhuma";
-    if (hasLine) {
-      textoTag = getNomeTag(currentLine);
-    }
-    parent.text("Última letra lida: " + textoTag, parent.width * 0.05, parent.height * 0.90);
+    parent.textFont (cardFont);
+    parent.textAlign(CENTER, CENTER);
+    parent.fill(0);
+    parent.textSize(parent.height * 0.24);
+  
+    parent.text(
+    lastTag,
+    parent.width / 2, 
+    parent.height * 0.52);
   }
 
 
   void handleSerialData(Serial p) {
+    if (showLastTag) {
+    return;
+  }
     try {
       String line = p.readStringUntil('\n');
       if (line != null) {
@@ -195,22 +210,30 @@ class JogoLetras {
         } else {
           currentLine = line.substring(3);
           hasLine = true;
+          lastTag = getNomeTag (currentLine);
+          showLastTag = true;
+          lastTagTime = millis();
         }
         println("Recebido: " + currentLine);
       }
       if (hasLine) {
+        hasLine = false;
         if (currentLine.equals(tags[chosenTag])) {
           if (myPort2 != null) {
             myPort2.write("C\n");
           }
-          parent.delay(1000);
-          startNewRound();
-        }
-        else {
-          parent.delay(1000);
+          lastTag = getNomeTag(currentLine);
+          showLastTag = true;
+          lastTagTime = millis();
+          waitingNextRound = true;
+      
+        } else {
           if (myPort2 != null) {
             myPort2.write("E\n");
           }
+          lastTag = getNomeTag(currentLine);
+          showLastTag = true;
+          lastTagTime = millis();
           if (file != null) {
             file.play();
           }
