@@ -195,22 +195,23 @@ class JogoTorres {
     tag = line.substring(3);
     reader = int(line.substring(0, 1));
     resposta[reader] = tag;
-    println("Recebido: \"" + tag);
+    println("Recebido: " + tag);
   }
 
   void processarResposta() {
     boolean correct = true;
     for (int i = 0; i < tags[rand].length; i++) {
+      correct = true;
       for (int c = 0; c < 3; c++) {
-        if (!resposta[i].equals(tags[rand][i][c])) {
+        if (!resposta[c].equals(tags[rand][i][c])) {
           correct = false;
-          break;
         }
       }
     }
     if (correct) {
       if (myPort2 != null) {
         myPort2.write("C\n");
+        startNewRound();
       }
     }
     else {
@@ -219,8 +220,6 @@ class JogoTorres {
       }
     }
     parent.delay(1000);
-
-    startNewRound();
   }
 
   void startNewRound() {
