@@ -5,7 +5,6 @@ class JogoMatematica {
   Serial myPort1, myPort2;
   String currentLine = "";
   boolean hasLine = false;
-  SoundFile file;
   ExitButton gameExitButton;
   boolean gameRunning = true;
 
@@ -49,21 +48,21 @@ class JogoMatematica {
 
 
   void setup() {
-  float exitW = parent.width * 0.08;
-  float exitH = parent.height * 0.06;
-
-  gameExitButton = new ExitButton(
-    parent.width - exitW - parent.width * 0.06,
-    parent.height - exitH - parent.height * 0.06,
-    exitW,
-    exitH,
-    "MENU",
-    color(255, 59, 48),
-    color(255, 120, 120),
-    buttonFont
-  );
-  novaConta();
-}
+    float exitW = parent.width * 0.08;
+    float exitH = parent.height * 0.06;
+  
+    gameExitButton = new ExitButton(
+      parent.width - exitW - parent.width * 0.06,
+      parent.height - exitH - parent.height * 0.06,
+      exitW,
+      exitH,
+      "MENU",
+      color(255, 59, 48),
+      color(255, 120, 120),
+      buttonFont
+    );
+    novaConta();
+  }
 
 
   String getNomeTag(String uid) {
@@ -84,7 +83,6 @@ class JogoMatematica {
     drawInstruction();
     drawMathCard();
     drawConta();
-    drawResposta();
     drawTagInfo();
     gameExitButton.display();
   }
@@ -144,21 +142,6 @@ class JogoMatematica {
     parent.text(num1 + " " + operacao + " " + num2 + " = ?", parent.width / 2, parent.height * 0.50);
   }
 
-  void drawResposta() {
-    parent.textFont (instructionFont);
-    parent.textAlign(CENTER);
-    parent.textSize(parent.height * 0.04);
-    parent.fill(40);
-  
-    if (respostaAtual != -1) {
-      parent.text(
-        "Resposta: " + respostaAtual,
-        parent.width / 2,
-        parent.height * 0.98
-      );
-    }
-  }
-
   void drawTagInfo() {
     parent.textFont (instructionFont);
     parent.textAlign(CENTER);
@@ -172,7 +155,7 @@ class JogoMatematica {
       textToTag = "nenhuma";
     }
     parent.text(
-      "Última número lido: " + textToTag,
+      "Último número lido: " + textToTag,
       parent.width * 0.13,
       parent.height * 0.90
     );
@@ -198,6 +181,7 @@ class JogoMatematica {
   
   
   void processarTag(String line) {
+    hasLine = true;
     tag = line.substring(3);
     currentLine = tag;
     reader = int(line.substring(0,1));

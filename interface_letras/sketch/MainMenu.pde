@@ -26,7 +26,7 @@ void setup() {
   fullScreen();
   smooth(8);
 
-  titleFont = createFont("Fredoka-Medium", int(height * 0.07));
+  titleFont = createFont("Fredoka-Medium", int(height * 0.09));
   instructionFont = createFont("Nunito", int(height * 0.03));
   cardFont = createFont("Fredoka", int(height * 0.07));
   buttonFont = createFont("Fredoka-Medium", int(height * 0.07));
@@ -35,10 +35,10 @@ void setup() {
   float btnH = height * 0.22;
   
   float gapX = width * 0.03;
-  float gapY = height * 0.05;
+  float gapY = height * 0.07;
   
   float centerX = width / 2;
-  float centerY = height * 0.50;
+  float centerY = height * 0.54;
   
   float startX = centerX - btnW - gapX/2;
   float startY = centerY - btnH -gapY/2;
@@ -55,12 +55,12 @@ void setup() {
 
   printArray(Serial.list());
   if (Serial.list().length > 4) {
-    String portName1 = Serial.list()[4];
+    String portName1 = Serial.list()[3];
     myPort1 = new Serial(this, portName1, 115200);
     myPort1.bufferUntil('\n');
     myPort1.clear();
 
-    String portName2 = Serial.list()[3];
+    String portName2 = Serial.list()[2];
     myPort2 = new Serial(this, portName2, 9600);
     myPort2.bufferUntil('\n');
     myPort2.clear();
@@ -116,7 +116,7 @@ void drawTitle() {
 
   fill(0);
 
-  text("Jogos Educativos", width / 2, height * 0.10);
+  text("Jogos", width / 2, height * 0.14);
 }
 
 

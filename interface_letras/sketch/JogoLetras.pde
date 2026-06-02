@@ -140,7 +140,7 @@ class JogoLetras {
   }
 
 
-  void drawLetterCard() {
+  void drawLetterCard() { //tirar
     parent.textFont (cardFont);
     parent.pushMatrix();
     parent.translate(parent.width / 2, parent.height * 0.52);
@@ -165,7 +165,7 @@ class JogoLetras {
   }
 
 
-  void drawLastTag() {
+  void drawLastTag() { //meter no lugar do que se tira - aparecer durante uns segundos antes de passar ao seguinte
     parent.textFont (instructionFont);
     parent.textAlign(LEFT);
     parent.fill(40);
