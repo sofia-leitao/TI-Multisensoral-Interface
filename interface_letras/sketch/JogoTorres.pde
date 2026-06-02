@@ -50,8 +50,8 @@ class JogoTorres {
     float exitH = parent.height * 0.06;
 
     gameExitButton = new ExitButton(
-      (int)(parent.width - exitW - parent.width * 0.02),
-      (int)(parent.height - exitH - parent.height * 0.02),
+      (int)(parent.width - exitW - parent.width * 0.06),
+      (int)(parent.height - exitH - parent.height * 0.06),
       (int)exitW,
       (int)exitH,
       "MENU",
@@ -145,7 +145,7 @@ class JogoTorres {
     parent.noStroke();
     parent.fill(0);
     parent.textAlign(CENTER, CENTER);
-    parent.textSize(parent.height * 0.04);
+    parent.textSize(parent.height * 0.06);
     parent.text(instrucaoEscolhida, 0, -20);
     parent.popMatrix();
     parent.rectMode(CORNER);
@@ -164,9 +164,9 @@ class JogoTorres {
     }
     
     parent.text(
-      "Última torre inserida: " + textoTag,
-      parent.width / 2,
-      parent.height * 0.82
+      "Última torre lida: " + textoTag,
+      parent.width  * 0.15,
+      parent.height * 0.90
     );
   }
 

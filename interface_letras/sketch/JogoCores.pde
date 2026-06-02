@@ -50,8 +50,16 @@ class JogoCores {
     float exitW = parent.width * 0.08;
     float exitH = parent.height * 0.06;
 
-    gameExitButton = new ExitButton(parent.width - exitW - parent.width * 0.02, parent.height - exitH - parent.height * 0.02, exitW, exitH, "MENU", color(255, 59, 48), color(255, 120, 120), buttonFont);
-    startNewRound();
+gameExitButton = new ExitButton(
+    parent.width - exitW - parent.width * 0.06,
+    parent.height - exitH - parent.height * 0.06,
+    exitW,
+    exitH,
+    "MENU",
+     color(255, 59, 48),
+     color(255, 120, 120),
+     buttonFont
+  );    startNewRound();
   }
   
   
@@ -151,7 +159,7 @@ class JogoCores {
     if (hasLine) {
       textoTag = getNomeTag(currentLine);
     }
-    parent.text("Última tag: " + textoTag, parent.width * 0.02, parent.height * 0.95);
+    parent.text("Última cor lida: " + textoTag, parent.width * 0.05, parent.height * 0.90);
     }
 
 

@@ -51,7 +51,7 @@ void setup() {
   float exitW = width * 0.08;
   float exitH = height * 0.06;
 
-  exitButton = new ExitButton(width - exitW - width * 0.02, height - exitH - height * 0.02, exitW, exitH, "Sair", color(255, 0, 0), color(255, 10, 10), buttonFont);
+  exitButton = new ExitButton(width - exitW - width * 0.06, height - exitH - height * 0.06, exitW, exitH, "Sair", color(255, 0, 0), color(255, 10, 10), buttonFont);
 
   printArray(Serial.list());
   if (Serial.list().length > 4) {

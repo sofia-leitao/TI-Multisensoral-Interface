@@ -53,8 +53,8 @@ class JogoMatematica {
   float exitH = parent.height * 0.06;
 
   gameExitButton = new ExitButton(
-    parent.width - exitW - parent.width * 0.02,
-    parent.height - exitH - parent.height * 0.02,
+    parent.width - exitW - parent.width * 0.06,
+    parent.height - exitH - parent.height * 0.06,
     exitW,
     exitH,
     "MENU",
@@ -172,9 +172,9 @@ class JogoMatematica {
       textToTag = "nenhuma";
     }
     parent.text(
-      "Última peça lida: " + textToTag,
-      parent.width / 2,
-      parent.height * 0.80
+      "Última número lido: " + textToTag,
+      parent.width * 0.13,
+      parent.height * 0.90
     );
   }
 

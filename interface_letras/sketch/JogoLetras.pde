@@ -93,8 +93,8 @@ class JogoLetras {
   float exitH = parent.height * 0.06;
 
   gameExitButton = new ExitButton(
-    parent.width - exitW - parent.width * 0.02,
-    parent.height - exitH - parent.height * 0.02,
+    parent.width - exitW - parent.width * 0.06,
+    parent.height - exitH - parent.height * 0.06,
     exitW,
     exitH,
     "MENU",
@@ -175,7 +175,7 @@ class JogoLetras {
     if (hasLine) {
       textoTag = getNomeTag(currentLine);
     }
-    parent.text("Última tag: " + textoTag, parent.width * 0.02, parent.height * 0.95);
+    parent.text("Última letra lida: " + textoTag, parent.width * 0.05, parent.height * 0.90);
   }
 
 
