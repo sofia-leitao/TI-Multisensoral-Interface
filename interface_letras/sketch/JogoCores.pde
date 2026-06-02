@@ -50,16 +50,16 @@ class JogoCores {
     float exitW = parent.width * 0.08;
     float exitH = parent.height * 0.06;
 
-gameExitButton = new ExitButton(
-    parent.width - exitW - parent.width * 0.06,
-    parent.height - exitH - parent.height * 0.06,
-    exitW,
-    exitH,
-    "MENU",
-     color(255, 59, 48),
-     color(255, 120, 120),
-     buttonFont
-  );    startNewRound();
+    gameExitButton = new ExitButton(
+        parent.width - exitW - parent.width * 0.06,
+        parent.height - exitH - parent.height * 0.06,
+        exitW,
+        exitH,
+        "MENU",
+         color(255, 59, 48),
+         color(255, 120, 120),
+         buttonFont
+      );    startNewRound();
   }
   
   

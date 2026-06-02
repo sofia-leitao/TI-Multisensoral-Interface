@@ -9,21 +9,25 @@ class JogoTorres {
   boolean hasLine = false;
 
   String[][][] tags = {
-    {{"04 6D 2F 9F D9 2A 81", "04 68 DC 9F D9 2A 81", "04 C1 3E 9F D9 2A 81"}},
-    {{"04 C1 3E 9F D9 2A 81", "04 68 DC 9F D9 2A 81", "04 6D 2F 9F D9 2A 81"}},
-    {{"04 68 DC 9F D9 2A 81", "04 C1 3E 9F D9 2A 81", "04 6D 2F 9F D9 2A 81"}, {"04 C1 3E 9F D9 2A 81", "04 6D 2F 9F D9 2A 81", "04 68 DC 9F D9 2A 81"}, {"04 68 DC 9F D9 2A 81", "04 6D 2F 9F D9 2A 81", "04 C1 3E 9F D9 2A 81"}},
+    {{"04 6D 2F 9F D9 2A 81", "04 68 DC 9F D9 2A 81", "04 C1 3E 9F D9 2A 81"},{"04 6D 2F 9F D9 2A 81", "04 C1 3E 9F D9 2A 81", "04 68 DC 9F D9 2A 81"}},
+    {{"04 C1 3E 9F D9 2A 81", "04 68 DC 9F D9 2A 81", "04 6D 2F 9F D9 2A 81"},{"04 68 DC 9F D9 2A 81", "04 C1 3E 9F D9 2A 81", "04 6D 2F 9F D9 2A 81"}},
+    {{"04 68 DC 9F D9 2A 81", "04 C1 3E 9F D9 2A 81", "04 6D 2F 9F D9 2A 81"}, {"04 C1 3E 9F D9 2A 81", "04 6D 2F 9F D9 2A 81", "04 68 DC 9F D9 2A 81"}, {"04 68 DC 9F D9 2A 81", "04 6D 2F 9F D9 2A 81", "04 C1 3E 9F D9 2A 81"}, {"04 C1 3E 9F D9 2A 81", "04 6D 2F 9F D9 2A 81", "04 68 DC 9F D9 2A 81"}},
     {{"04 6D 2F 9F D9 2A 81", "04 C1 3E 9F D9 2A 81", "04 68 DC 9F D9 2A 81"}, {"04 C1 3E 9F D9 2A 81", "04 6D 2F 9F D9 2A 81", "04 68 DC 9F D9 2A 81"}, {"04 68 DC 9F D9 2A 81", "04 6D 2F 9F D9 2A 81", "04 C1 3E 9F D9 2A 81"}},
-    {{"04 C1 3E 9F D9 2A 81", "04 68 DC 9F D9 2A 81", "04 6D 2F 9F D9 2A 81"}},
+    {{"04 C1 3E 9F D9 2A 81", "04 68 DC 9F D9 2A 81", "04 6D 2F 9F D9 2A 81"}}, 
     {{"04 6D 2F 9F D9 2A 81", "04 68 DC 9F D9 2A 81", "04 C1 3E 9F D9 2A 81"}}
   };
 
+//P: 04 C1 3E 9F D9 2A 81
+//M: 04 68 DC 9F D9 2A 81
+//G: 04 6D 2F 9F D9 2A 81
+
   String[] instrucoes = {
-    "Ao olhar pelo lado esquerdo da caixa\nsó consegues ver 1 torre.",
-    "Ao olhar pelo lado direito da caixa\nsó consegues ver 1 torre.",
-    "Ao olhar pelo lado esquerdo da caixa\nconsegues ver 2 torres.",
-    "Ao olhar pelo lado direito da caixa\nconsegues ver 2 torres.",
-    "Ao olhar pelo lado esquerdo da caixa\ntodas as torres têm de ser visíveis.",
-    "Ao olhar pelo lado direito da caixa\ntodas as torres têm de ser visíveis."
+    "Ao olhar pelo lado esquerdo da caixa\nsó consegues ver 1 torre.", //GMP, GPM
+    "Ao olhar pelo lado direito da caixa\nsó consegues ver 1 torre.", //PMG, MPG
+    "Ao olhar pelo lado esquerdo da caixa\nconsegues ver 2 torres.", //MPG, MGP, PGM, MGP
+    "Ao olhar pelo lado direito da caixa\nconsegues ver 2 torres.", //MGP, PGM, GPM, 
+    "Ao olhar pelo lado esquerdo da caixa\ntodas as torres têm de ser visíveis.", //PMG
+    "Ao olhar pelo lado direito da caixa\ntodas as torres têm de ser visíveis." //GMP
   };
 
   String instrucaoEscolhida;

@@ -151,20 +151,6 @@ class JogoLetras {
   }
 
 
-  void drawLetterCard() { //tirar
-    parent.textFont (cardFont);
-    parent.pushMatrix();
-    parent.translate(parent.width / 2, parent.height * 0.52);
-  
-    parent.textAlign(CENTER, CENTER);
-    parent.fill(0);
-    parent.textSize(parent.height * 0.24);
-    parent.text(pieceNames[chosenTag], 0, 0);
-  
-    parent.popMatrix();
-  }
-
-
   void drawInstructions() {
     parent.textFont (instructionFont);
     parent.textAlign(CENTER);
