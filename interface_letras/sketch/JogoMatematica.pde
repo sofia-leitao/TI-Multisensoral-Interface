@@ -141,6 +141,7 @@ class JogoMatematica {
     parent.fill(0);
     parent.text(num1 + " " + operacao + " " + num2 + " = ?", parent.width / 2, parent.height * 0.50);
   }
+  
 
   void drawTagInfo() {
     parent.textFont (instructionFont);

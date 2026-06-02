@@ -70,8 +70,6 @@ class JogoLetras {
     "../Letras/Z.mp3"
   };
 
-
-
   int chosenTag;
   ExitButton gameExitButton;
   boolean gameRunning = true;
@@ -94,21 +92,21 @@ class JogoLetras {
 
 
   void setup() {
-  float exitW = parent.width * 0.08;
-  float exitH = parent.height * 0.06;
-
-  gameExitButton = new ExitButton(
-    parent.width - exitW - parent.width * 0.06,
-    parent.height - exitH - parent.height * 0.06,
-    exitW,
-    exitH,
-    "MENU",
-     color(255, 59, 48),
-     color(255, 120, 120),
-     buttonFont
-  );
-
-  startNewRound();
+    float exitW = parent.width * 0.08;
+    float exitH = parent.height * 0.06;
+  
+    gameExitButton = new ExitButton(
+      parent.width - exitW - parent.width * 0.06,
+      parent.height - exitH - parent.height * 0.06,
+      exitW,
+      exitH,
+      "MENU",
+       color(255, 59, 48),
+       color(255, 120, 120),
+       buttonFont
+    );
+  
+    startNewRound();
   }
 
 
@@ -144,10 +142,7 @@ class JogoLetras {
     parent.textAlign(CENTER, CENTER);
     parent.textSize(parent.height * 0.06);
     parent.fill(0);
-    parent.text(
-    "Jogo das Letras",
-    parent.width / 2,
-    parent.height * 0.14);
+    parent.text("Jogo das Letras", parent.width / 2, parent.height * 0.14);
   }
 
 

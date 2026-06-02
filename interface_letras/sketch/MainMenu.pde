@@ -1,5 +1,4 @@
 import processing.serial.*;
-import processing.sound.*;
 
 MenuButton letrasButton;
 MenuButton matButton;
@@ -43,20 +42,15 @@ void setup() {
   float startX = centerX - btnW - gapX/2;
   float startY = centerY - btnH -gapY/2;
 
-  letrasButton = new MenuButton(startX, startY, btnW, btnH, 
-  "Jogo das Letras", color(76, 201, 240), color(120, 220, 250), titleFont);
-  matButton = new MenuButton(startX + btnW + gapX, startY, btnW, btnH, 
-  "Jogo da Matemática", color(255, 209, 102), color(255, 225, 152), titleFont);
-  coresButton = new MenuButton(startX, startY + btnH + gapY, btnW, btnH, 
-  "Jogo das Cores", color(255, 65, 107), color(255, 120, 150), titleFont);
-  torresButton = new MenuButton(startX + btnW + gapX, startY + btnH + gapY, btnW, btnH, 
-  "Jogo das Torres", color(98, 199, 89), color(140, 220, 130), titleFont);
+  letrasButton = new MenuButton(startX, startY, btnW, btnH, "Jogo das Letras", color(76, 201, 240), color(120, 220, 250), titleFont);
+  matButton = new MenuButton(startX + btnW + gapX, startY, btnW, btnH, "Jogo da Matemática", color(255, 209, 102), color(255, 225, 152), titleFont);
+  coresButton = new MenuButton(startX, startY + btnH + gapY, btnW, btnH, "Jogo das Cores", color(255, 65, 107), color(255, 120, 150), titleFont);
+  torresButton = new MenuButton(startX + btnW + gapX, startY + btnH + gapY, btnW, btnH, "Jogo das Torres", color(98, 199, 89), color(140, 220, 130), titleFont);
 
   float exitW = width * 0.08;
   float exitH = height * 0.06;
 
-  exitButton = new ExitButton(width - exitW - width * 0.06, height - exitH - height * 0.06, exitW, exitH, 
-  "Sair", color(255, 0, 0), color(255, 10, 10), buttonFont);
+  exitButton = new ExitButton(width - exitW - width * 0.06, height - exitH - height * 0.06, exitW, exitH, "Sair", color(255, 0, 0), color(255, 10, 10), buttonFont);
 
   printArray(Serial.list());
   if (Serial.list().length > 4) {

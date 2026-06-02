@@ -17,10 +17,6 @@ class JogoTorres {
     {{"04 6D 2F 9F D9 2A 81", "04 68 DC 9F D9 2A 81", "04 C1 3E 9F D9 2A 81"}}
   };
 
-//P: 04 C1 3E 9F D9 2A 81
-//M: 04 68 DC 9F D9 2A 81
-//G: 04 6D 2F 9F D9 2A 81
-
   String[] instrucoes = {
     "Ao olhar pelo lado esquerdo da caixa\nsó consegues ver 1 torre.", //GMP, GPM
     "Ao olhar pelo lado direito da caixa\nsó consegues ver 1 torre.", //PMG, MPG
@@ -41,13 +37,13 @@ class JogoTorres {
   boolean gameRunning = true;
 
   JogoTorres(PApplet parent, Serial myPort1, Serial myPort2) {
-
     this.parent = parent;
     this.myPort1 = myPort1;
     this.myPort2 = myPort2;
 
     this.resposta = new String[3];
   }
+
 
   void setup() {
     float exitW = parent.width * 0.08;
@@ -109,11 +105,7 @@ class JogoTorres {
     parent.textAlign(CENTER, CENTER);
     parent.textSize(parent.height * 0.06);
     parent.fill(0);
-    parent.text(
-      "Jogo das Torres",
-      parent.width / 2,
-      parent.height * 0.14
-    );
+    parent.text("Jogo das Torres", parent.width / 2, parent.height * 0.14);
   }
 
 
@@ -122,29 +114,17 @@ class JogoTorres {
     parent.fill(0);
     parent.textAlign(CENTER);
     parent.textSize(parent.height * 0.03);
-    parent.text(
-      "Coloca as torres na ordem correta",
-      parent.width / 2,
-      parent.height * 0.28
-    );
+    parent.text("Coloca as torres na ordem correta", parent.width / 2, parent.height * 0.28);
     parent.fill(70);
     parent.textSize(parent.height * 0.025);
-    parent.text(
-      "Depois pressiona o botão",
-      parent.width / 2,
-      parent.height * 0.32
-    );
+    parent.text("Depois pressiona o botão", parent.width / 2, parent.height * 0.32);
   }
 
 
   void drawTowerCard() {
     parent.textFont (cardFont);
     parent.pushMatrix();
-    parent.translate(
-      parent.width / 2,
-      parent.height * 0.52
-    );
-
+    parent.translate(parent.width / 2, parent.height * 0.52);
     parent.rectMode(CENTER);
     parent.noStroke();
     parent.fill(0);
@@ -235,9 +215,8 @@ class JogoTorres {
     if (resposta == null) {
       resposta = new String[3];
     }
-
+    
     rand = int(parent.random(instrucoes.length));
-
     instrucaoEscolhida = instrucoes[rand];
 
     resposta[0] = null;
@@ -245,7 +224,6 @@ class JogoTorres {
     resposta[2] = null;
 
     currentLine = "";
-
     hasLine = false;
   }
 

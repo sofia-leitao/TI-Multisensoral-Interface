@@ -19,25 +19,11 @@ class JogoCores {
   };
 
   String[][] tags = {
-    {
-      "04 4A DD 9F D9 2A 81",
-      "04 76 E3 9F D9 2A 81"
-    },
-    {
-      "04 DF 42 9F D9 2A 81",
-      "04 E1 42 9F D9 2A 81"
-    },
-    {
-      "04 67 2F 9F D9 2A 81",
-      "04 D5 42 9F D9 2A 81"
-    }
-  };
+    {"04 4A DD 9F D9 2A 81", "04 76 E3 9F D9 2A 81"},
+    {"04 DF 42 9F D9 2A 81", "04 E1 42 9F D9 2A 81"},
+    {"04 67 2F 9F D9 2A 81","04 D5 42 9F D9 2A 81"}};
 
-  color[] displayColors = {
-    color(255, 59, 48),
-    color(52, 199, 89),
-    color(0, 122, 255)
-  };
+  color[] displayColors = {color(255, 59, 48), color(52, 199, 89), color(0, 122, 255)};
 
   JogoCores(PApplet parent, Serial myPort1, Serial myPort2) {
     this.parent = parent;
@@ -49,17 +35,8 @@ class JogoCores {
   void setup() {
     float exitW = parent.width * 0.08;
     float exitH = parent.height * 0.06;
-
-    gameExitButton = new ExitButton(
-        parent.width - exitW - parent.width * 0.06,
-        parent.height - exitH - parent.height * 0.06,
-        exitW,
-        exitH,
-        "MENU",
-         color(255, 59, 48),
-         color(255, 120, 120),
-         buttonFont
-      );    startNewRound();
+    gameExitButton = new ExitButton(parent.width - exitW - parent.width * 0.06, parent.height - exitH - parent.height * 0.06, exitW, exitH, "MENU", color(255, 59, 48), color(255, 120, 120), buttonFont);    
+    startNewRound();
   }
   
   
@@ -124,19 +101,14 @@ class JogoCores {
     float cardH = parent.height * 0.35;
 
     parent.pushMatrix();
-
-    parent.translate(
-      parent.width/2,
-      parent.height * 0.52
-      );
-
+    parent.translate(parent.width/2, parent.height * 0.52);
     parent.rectMode(CENTER);
     parent.fill(displayColors[chosenColor]);
     parent.rect(0, 0, cardW, cardH, cardH * 0.12);
-
     parent.fill(255, 40);
     parent.noStroke();
     parent.popMatrix();
+    
     parent.rectMode(CORNER);
   }
 
@@ -160,7 +132,7 @@ class JogoCores {
       textoTag = getNomeTag(currentLine);
     }
     parent.text("Última cor lida: " + textoTag, parent.width * 0.05, parent.height * 0.90);
-    }
+  }
 
 
   void handleSerialData(Serial p) {
@@ -183,6 +155,7 @@ class JogoCores {
       e.printStackTrace();
     }
   }
+
 
   void processarTag(String tag) {
     if (tagCorreta(tag, chosenColor)) {
