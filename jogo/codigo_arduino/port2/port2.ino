@@ -63,6 +63,7 @@ void loop() {
 void lerRFID(MFRC522 &rfid) {
   if (!rfid.PICC_IsNewCardPresent()) return;
   if (!rfid.PICC_ReadCardSerial()) return;
+  Serial.print("0-");
   printHex(rfid.uid.uidByte, rfid.uid.size);
   Serial.println();
   rfid.PICC_HaltA();
@@ -72,9 +73,7 @@ void lerRFID(MFRC522 &rfid) {
 void serialEvent() {
   String comando = Serial.readStringUntil('\n');
   comando.trim();
-  
-  // correto
-  if (comando == "C") {
+  if (comando == "C") {  // correto
     for (int i = 0; i < 5; i++) {
       verde();
       delay(200);
@@ -82,8 +81,7 @@ void serialEvent() {
       delay(200);
     }
   }
-  // erro
-  else if (comando == "E") {
+  else if (comando == "E") { // errado
     for (int i = 0; i < 5; i++) {
       vermelho();
       delay(200);
@@ -91,22 +89,10 @@ void serialEvent() {
       delay(200);
     }
   }
-  // vermelho
-  else if (comando == "R") {
-    vermelho();
-  }
-  // verde
-  else if (comando == "G") {
-    verde();
-  }
-  // azul
-  else if (comando == "B") {
-    azul();
-  }
-
-  else if (comando == "A") {
-    apagarLED();
-  }
+  else if (comando == "R") { vermelho();}
+  else if (comando == "G") { verde();}
+  else if (comando == "B") { azul();}
+  else if (comando == "A") { apagarLED();}
 }
 
 
@@ -139,7 +125,6 @@ void apagarLED() {
 
 
 void printHex(byte *buffer, byte bufferSize) {
-  Serial.print("0-");
   for (byte i = 0; i < bufferSize; i++) {
     Serial.print(buffer[i] < 0x10 ? " 0" : " ");
     Serial.print(buffer[i], HEX);

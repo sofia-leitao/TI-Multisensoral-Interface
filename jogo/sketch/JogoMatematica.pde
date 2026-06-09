@@ -212,7 +212,7 @@ class JogoMatematica {
       }
     } else if (n_algarismos == 2) {
       if ((resposta[0].equals(numberTags1[0]) || resposta[0].equals(numberTags2[0])) && 
-         (resposta[1].equals(numberTags1[int(resultado/10)]) || resposta[1].equals(numberTags2[int(resultado/10)])) && 
+         (resposta[1].equals(numberTags1[int((resultado/10)%10)]) || resposta[1].equals(numberTags2[int((resultado/10)%10)])) && 
          (resposta[2].equals(numberTags1[resultado%10]) || resposta[2].equals(numberTags2[resultado%10]))) {
         if (myPort2 != null) {
             myPort2.write("C\n");
@@ -225,7 +225,7 @@ class JogoMatematica {
       }
     } else {
       if ((resposta[0].equals(numberTags1[int(resultado/100)]) || resposta[0].equals(numberTags2[int(resultado/100)])) && 
-          (resposta[1].equals(numberTags1[int(resultado/10)]) || resposta[1].equals(numberTags2[int(resultado/10)])) && 
+          (resposta[1].equals(numberTags1[int((resultado/10)%10)]) || resposta[1].equals(numberTags2[int((resultado/10)%10)])) && 
           (resposta[2].equals(numberTags1[resultado%10]) || resposta[2].equals(numberTags2[resultado%10]))) {
         if (myPort2 != null) {
             myPort2.write("C\n");

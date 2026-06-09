@@ -32,22 +32,13 @@ void setup() {
  * Main loop.
  */
 void loop() {
-  // Look for new cards - use index-based loop instead of range-based
   for (int readerIndex = 0; readerIndex < 2; readerIndex++) {
     MFRC522& reader = readers[readerIndex];  // Get reference to current reader
-    
     if (reader.PICC_IsNewCardPresent() && reader.PICC_ReadCardSerial()) {
       Serial.print(String(readerIndex + 1) + "-"); 
-      
       MFRC522Debug::PrintUID(Serial, reader.uid);
       Serial.println();
-      
-      //MFRC522::PICC_Type piccType = reader.PICC_GetType(reader.uid.sak);
-      //Serial.println(MFRC522Debug::PICC_GetTypeName(piccType));
-      
-      // Halt PICC
       reader.PICC_HaltA();
-      // Stop encryption on PCD
       reader.PCD_StopCrypto1();
     }
   }
